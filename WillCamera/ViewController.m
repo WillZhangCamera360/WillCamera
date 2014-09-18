@@ -7,21 +7,43 @@
 //
 
 #import "ViewController.h"
+#import "AVCamPreviewView.h"
+#import "MyCaptureSessionManager.h"
 
 @interface ViewController ()
+
+@property (nonatomic, weak)IBOutlet AVCamPreviewView *previewView;
 
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    [(AVCaptureVideoPreviewLayer *)self.previewView.layer setSession:[MyCaptureSessionManager sharedMyCaptureSessionManager].session];
+    
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[MyCaptureSessionManager sharedMyCaptureSessionManager] startRuning];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[MyCaptureSessionManager sharedMyCaptureSessionManager] stopRuning];
+}
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark -
 
 @end

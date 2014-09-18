@@ -14,6 +14,8 @@
 		A4CF122319CAB78C00351CA9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4CF122219CAB78C00351CA9 /* Images.xcassets */; };
 		A4CF122619CAB78C00351CA9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4CF122419CAB78C00351CA9 /* LaunchScreen.xib */; };
 		A4CF123219CAB78D00351CA9 /* WillCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF123119CAB78D00351CA9 /* WillCameraTests.m */; };
+		A4CF124119CAC70F00351CA9 /* AVCamPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */; };
+		A4ECA5F119CAD22C00960446 /* MyCaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,12 @@
 		A4CF122B19CAB78D00351CA9 /* WillCameraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WillCameraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CF123019CAB78D00351CA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4CF123119CAB78D00351CA9 /* WillCameraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WillCameraTests.m; sourceTree = "<group>"; };
+		A4CF123F19CAC70F00351CA9 /* AVCamPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamPreviewView.h; sourceTree = "<group>"; };
+		A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamPreviewView.m; sourceTree = "<group>"; };
+		A4ECA5EF19CAD22C00960446 /* MyCaptureSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCaptureSessionManager.h; sourceTree = "<group>"; };
+		A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCaptureSessionManager.m; sourceTree = "<group>"; };
+		A4ECA5F319CAD9D800960446 /* PublicDefineHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefineHeader.h; sourceTree = "<group>"; };
+		A4ECA5F419CADB9700960446 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,13 +89,10 @@
 		A4CF121419CAB78C00351CA9 /* WillCamera */ = {
 			isa = PBXGroup;
 			children = (
-				A4CF121919CAB78C00351CA9 /* AppDelegate.h */,
-				A4CF121A19CAB78C00351CA9 /* AppDelegate.m */,
-				A4CF121C19CAB78C00351CA9 /* ViewController.h */,
-				A4CF121D19CAB78C00351CA9 /* ViewController.m */,
-				A4CF121F19CAB78C00351CA9 /* Main.storyboard */,
-				A4CF122219CAB78C00351CA9 /* Images.xcassets */,
-				A4CF122419CAB78C00351CA9 /* LaunchScreen.xib */,
+				A4CF123B19CAC56900351CA9 /* Classes */,
+				A4CF123D19CAC5B300351CA9 /* Vendors */,
+				A4CF123E19CAC61400351CA9 /* Common */,
+				A4CF123C19CAC59700351CA9 /* Resources */,
 				A4CF121519CAB78C00351CA9 /* Supporting Files */,
 			);
 			path = WillCamera;
@@ -98,6 +103,7 @@
 			children = (
 				A4CF121619CAB78C00351CA9 /* Info.plist */,
 				A4CF121719CAB78C00351CA9 /* main.m */,
+				A4ECA5F419CADB9700960446 /* PrefixHeader.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -117,6 +123,46 @@
 				A4CF123019CAB78D00351CA9 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A4CF123B19CAC56900351CA9 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A4ECA5F319CAD9D800960446 /* PublicDefineHeader.h */,
+				A4CF121919CAB78C00351CA9 /* AppDelegate.h */,
+				A4CF121A19CAB78C00351CA9 /* AppDelegate.m */,
+				A4CF121C19CAB78C00351CA9 /* ViewController.h */,
+				A4CF121D19CAB78C00351CA9 /* ViewController.m */,
+				A4CF123F19CAC70F00351CA9 /* AVCamPreviewView.h */,
+				A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */,
+				A4ECA5EF19CAD22C00960446 /* MyCaptureSessionManager.h */,
+				A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		A4CF123C19CAC59700351CA9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A4CF122219CAB78C00351CA9 /* Images.xcassets */,
+				A4CF121F19CAB78C00351CA9 /* Main.storyboard */,
+				A4CF122419CAB78C00351CA9 /* LaunchScreen.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A4CF123D19CAC5B300351CA9 /* Vendors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Vendors;
+			sourceTree = "<group>";
+		};
+		A4CF123E19CAC61400351CA9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,6 +267,8 @@
 			files = (
 				A4CF121E19CAB78C00351CA9 /* ViewController.m in Sources */,
 				A4CF121B19CAB78C00351CA9 /* AppDelegate.m in Sources */,
+				A4ECA5F119CAD22C00960446 /* MyCaptureSessionManager.m in Sources */,
+				A4CF124119CAC70F00351CA9 /* AVCamPreviewView.m in Sources */,
 				A4CF121819CAB78C00351CA9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,7 +391,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = WillCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = WillCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -353,7 +404,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = WillCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = WillCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -412,6 +466,7 @@
 				A4CF123719CAB78D00351CA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A4CF123819CAB78D00351CA9 /* Build configuration list for PBXNativeTarget "WillCameraTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +475,7 @@
 				A4CF123A19CAB78D00351CA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
