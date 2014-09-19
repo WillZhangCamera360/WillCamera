@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>4C85FD36-9AC1-4856-8CE1-B4F9C7F9B096</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WillCamera</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E7B5E7772C1B22BC1199122ECC1F6880039BBF2C</key>
+		<string>github.com:WillZhangCamera360/WillCamera.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>WillCamera.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E7B5E7772C1B22BC1199122ECC1F6880039BBF2C</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:WillZhangCamera360/WillCamera.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E7B5E7772C1B22BC1199122ECC1F6880039BBF2C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E7B5E7772C1B22BC1199122ECC1F6880039BBF2C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>WillCamera</string>
+		</dict>
+	</array>
+</dict>
+</plist>

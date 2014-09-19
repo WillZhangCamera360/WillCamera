@@ -8,6 +8,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 
+
 @interface MyCaptureSessionManager : NSObject
 
 SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
@@ -20,5 +21,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 - (void)stopRuning;
 ///切换前后摄像头
 - (void)changeCamera;
+///拍照
+- (void)takePictureWithCompletionBlock:(void (^)(UIImage *image, NSError *error))completionBlock;
 
 @end

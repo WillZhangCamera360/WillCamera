@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,19 +17,106 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T1Y-aG-lmn" customClass="AVCamPreviewView">
-                                <rect key="frame" x="16" y="0.0" width="568" height="600"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="msq-yH-pCL">
+                                        <rect key="frame" x="8" y="0.0" width="75" height="30"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <state key="normal" title="切换摄像头">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="changeCamera:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="b3U-xn-2pP"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y6v-Gg-PXF">
+                                        <rect key="frame" x="275" y="535" width="50" height="40"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="7E3-cg-lAk"/>
+                                            <constraint firstAttribute="height" constant="40" id="Y2W-V2-0Gh"/>
+                                        </constraints>
+                                        <state key="normal" title="拍摄">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="takePicture:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fOh-jo-tPR"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="msq-yH-pCL" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" id="5Yw-aw-BY6"/>
+                                    <constraint firstAttribute="centerX" secondItem="Y6v-Gg-PXF" secondAttribute="centerX" id="NBJ-QJ-AD4"/>
+                                    <constraint firstAttribute="bottom" secondItem="Y6v-Gg-PXF" secondAttribute="bottom" constant="5" id="RRK-3C-IZB"/>
+                                    <constraint firstItem="msq-yH-pCL" firstAttribute="leading" secondItem="T1Y-aG-lmn" secondAttribute="leading" constant="8" id="eaq-32-xDT"/>
+                                </constraints>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RzX-Mq-3Ls">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rGz-j1-905">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="580"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </imageView>
+                                    <button opaque="NO" tag="99" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wDc-OI-A3c">
+                                        <rect key="frame" x="10" y="524" width="64" height="46"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="46" id="RCl-nQ-zUi"/>
+                                            <constraint firstAttribute="width" constant="64" id="y8f-mu-RbO"/>
+                                        </constraints>
+                                        <state key="normal" title="存储">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="savePictureOperation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dY8-Kq-FY3"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VK7-PW-Yn3">
+                                        <rect key="frame" x="526" y="524" width="64" height="46"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="46" id="23P-vS-3WL"/>
+                                            <constraint firstAttribute="width" constant="64" id="AsR-Fw-hZ5"/>
+                                        </constraints>
+                                        <state key="normal" title="放弃">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="savePictureOperation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="8Sl-5u-A0z"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="VK7-PW-Yn3" secondAttribute="bottom" constant="10" id="CRF-es-wyB"/>
+                                    <constraint firstItem="wDc-OI-A3c" firstAttribute="leading" secondItem="RzX-Mq-3Ls" secondAttribute="leading" constant="10" id="EbT-VF-bzm"/>
+                                    <constraint firstAttribute="trailing" secondItem="VK7-PW-Yn3" secondAttribute="trailing" constant="10" id="FZ4-OF-hXR"/>
+                                    <constraint firstItem="wDc-OI-A3c" firstAttribute="bottom" secondItem="VK7-PW-Yn3" secondAttribute="bottom" id="QpK-FJ-yUx"/>
+                                    <constraint firstItem="rGz-j1-905" firstAttribute="top" secondItem="RzX-Mq-3Ls" secondAttribute="top" id="cdX-h2-6Tf"/>
+                                    <constraint firstItem="rGz-j1-905" firstAttribute="leading" secondItem="RzX-Mq-3Ls" secondAttribute="leading" id="iQz-gs-NtV"/>
+                                    <constraint firstAttribute="trailing" secondItem="rGz-j1-905" secondAttribute="trailing" id="s3y-ve-w5u"/>
+                                    <constraint firstAttribute="bottom" secondItem="rGz-j1-905" secondAttribute="bottom" id="zcC-Oc-08q"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="T1Y-aG-lmn" secondAttribute="trailing" id="Rv7-Vb-FhZ"/>
-                            <constraint firstItem="T1Y-aG-lmn" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="eBx-cP-5MH"/>
-                            <constraint firstItem="T1Y-aG-lmn" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="fyp-Cu-V4d"/>
+                            <constraint firstItem="T1Y-aG-lmn" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="20" id="9ZR-hb-DTy"/>
+                            <constraint firstItem="RzX-Mq-3Ls" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Ard-yd-gy9"/>
+                            <constraint firstAttribute="trailing" secondItem="RzX-Mq-3Ls" secondAttribute="trailing" id="IPI-cc-ZEC"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="RzX-Mq-3Ls" secondAttribute="bottom" id="Lcj-LQ-4z8"/>
+                            <constraint firstAttribute="trailing" secondItem="T1Y-aG-lmn" secondAttribute="trailing" id="a05-uz-2hL"/>
+                            <constraint firstItem="T1Y-aG-lmn" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="bHh-n3-pGL"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="bottom" id="h33-Ph-yB6"/>
+                            <constraint firstItem="RzX-Mq-3Ls" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="kcQ-6q-bx8"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="bottom" id="wuQ-xG-jWu"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="picturePreiewImageView" destination="rGz-j1-905" id="H3H-tC-CTk"/>
+                        <outlet property="picturePreiewView" destination="RzX-Mq-3Ls" id="EyD-9O-Uru"/>
                         <outlet property="previewView" destination="T1Y-aG-lmn" id="wDo-J6-b0F"/>
                     </connections>
                 </viewController>

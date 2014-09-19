@@ -19,6 +19,9 @@
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
 
 
+@property (nonatomic, copy) void (^takePictureCompletionBlock)(UIImage *image, NSError *error);
+
+
 @end
 
 @implementation MyCaptureSessionManager
@@ -50,7 +53,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
             
             AVCaptureDevice *videoDevice = [self deviceWithMediaType:AVMediaTypeVideo
                                                   preferringPosition:AVCaptureDevicePositionBack];
-            AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+            AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
+                                                                                           error:&error];
             
             if (error)
             {
@@ -192,7 +196,7 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
         
         [[self session] beginConfiguration];
         [[self session] removeInput:[self videoDeviceInput]];
-       
+        
         if ([[self session] canAddInput:videoDeviceInput])
         {
             [[self session] addInput:videoDeviceInput];
@@ -208,6 +212,43 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
     });
 }
 
+
+///拍照
+- (void)takePictureWithCompletionBlock:(void (^)(UIImage *image, NSError *error))completionBlock;
+{
+    self.takePictureCompletionBlock = completionBlock;
+    dispatch_async([self sessionQueue], ^{
+        
+        // Flash set to Auto for Still Capture
+        [self setFlashMode:AVCaptureFlashModeAuto forDevice:[[self videoDeviceInput] device]];
+        
+        
+        void (^captureStillImageCompletionHandler)(CMSampleBufferRef imageDataSampleBuffer, NSError *error) =
+        ^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.takePictureCompletionBlock(nil, error);
+                });
+                
+                return ;
+            }
+            
+            if (imageDataSampleBuffer)
+            {
+                NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                UIImage *image = [[UIImage alloc] initWithData:imageData];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.takePictureCompletionBlock(image, nil);
+                });
+            }
+        };
+        // Capture a still image.
+        [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput]
+                                                                                connectionWithMediaType:AVMediaTypeVideo]
+                                                             completionHandler:captureStillImageCompletionHandler];
+    });
+}
 
 #pragma mark -  Prvite Method
 

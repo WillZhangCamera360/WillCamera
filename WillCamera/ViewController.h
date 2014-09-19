@@ -6,8 +6,10 @@
 //  Copyright (c) 2014年 Camera360. All rights reserved.
 //
 
+#import "CameraBaiscViewController.h"
 
-@interface ViewController : UIViewController
+
+@interface ViewController : CameraBaiscViewController
 
 
 @end

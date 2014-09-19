@@ -9,6 +9,13 @@
 #import "AVCamPreviewView.h"
 #import <AVFoundation/AVFoundation.h>
 
+@interface AVCamPreviewView ()
+
+///拍摄的照片预览图片
+@property (nonatomic ,strong) UIImageView *previewPictureImageView;
+
+
+@end
 
 @implementation AVCamPreviewView
 
