@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A4B1AE2A19CBDF4100132CDC /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B1AE2919CBDF4100132CDC /* AssetsLibrary.framework */; };
 		A4B1AE2D19CBFAC300132CDC /* CameraBaiscViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */; };
+		A4B1AE3C19CC370200132CDC /* AVCamPreviewGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */; };
 		A4CF121819CAB78C00351CA9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF121719CAB78C00351CA9 /* main.m */; };
 		A4CF121B19CAB78C00351CA9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF121A19CAB78C00351CA9 /* AppDelegate.m */; };
 		A4CF121E19CAB78C00351CA9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF121D19CAB78C00351CA9 /* ViewController.m */; };
@@ -36,6 +37,8 @@
 		A4B1AE2919CBDF4100132CDC /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		A4B1AE2B19CBFAC300132CDC /* CameraBaiscViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraBaiscViewController.h; sourceTree = "<group>"; };
 		A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraBaiscViewController.m; sourceTree = "<group>"; };
+		A4B1AE3A19CC370200132CDC /* AVCamPreviewGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamPreviewGLView.h; sourceTree = "<group>"; };
+		A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamPreviewGLView.m; sourceTree = "<group>"; };
 		A4CF121219CAB78C00351CA9 /* WillCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WillCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CF121619CAB78C00351CA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4CF121719CAB78C00351CA9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -158,6 +161,8 @@
 				A4CF121D19CAB78C00351CA9 /* ViewController.m */,
 				A4CF123F19CAC70F00351CA9 /* AVCamPreviewView.h */,
 				A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */,
+				A4B1AE3A19CC370200132CDC /* AVCamPreviewGLView.h */,
+				A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */,
 				A4ECA5EF19CAD22C00960446 /* MyCaptureSessionManager.h */,
 				A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */,
 			);
@@ -324,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4CF121E19CAB78C00351CA9 /* ViewController.m in Sources */,
+				A4B1AE3C19CC370200132CDC /* AVCamPreviewGLView.m in Sources */,
 				A4CF121B19CAB78C00351CA9 /* AppDelegate.m in Sources */,
 				A4B1AE2D19CBFAC300132CDC /* CameraBaiscViewController.m in Sources */,
 				A4ECA5F119CAD22C00960446 /* MyCaptureSessionManager.m in Sources */,

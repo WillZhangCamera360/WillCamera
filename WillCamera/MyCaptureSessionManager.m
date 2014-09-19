@@ -81,74 +81,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
     return self;
 }
 
-#pragma mark Device Configuration
-
-- (void)focusWithMode:(AVCaptureFocusMode)focusMode
-       exposeWithMode:(AVCaptureExposureMode)exposureMode
-        atDevicePoint:(CGPoint)point
-monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
-{
-    
-    dispatch_async([self sessionQueue], ^{
-        AVCaptureDevice *device = [[self videoDeviceInput] device];
-        NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
-            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode])
-            {
-                [device setFocusMode:focusMode];
-                [device setFocusPointOfInterest:point];
-            }
-            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
-            {
-                [device setExposureMode:exposureMode];
-                [device setExposurePointOfInterest:point];
-            }
-            [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
-            [device unlockForConfiguration];
-        }
-        else
-        {
-            NSLog(@"%@", error);
-        }
-    });
-}
-
-- (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
-{
-    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
-    {
-        NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
-            [device setFlashMode:flashMode];
-            [device unlockForConfiguration];
-        }
-        else
-        {
-            NSLog(@"%@", error);
-        }
-    }
-}
-
-///根据类型和摄像头位置返回对应的设备对象
-- (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position
-{
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:mediaType];
-    AVCaptureDevice *captureDevice = [devices firstObject];
-    
-    for (AVCaptureDevice *device in devices)
-    {
-        if ([device position] == position)
-        {
-            captureDevice = device;
-            break;
-        }
-    }
-    
-    return captureDevice;
-}
-
 
 #pragma mark - Public Method
 
@@ -276,6 +208,75 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
             });
         }
     }];
+}
+
+
+#pragma mark Device Configuration
+
+- (void)focusWithMode:(AVCaptureFocusMode)focusMode
+       exposeWithMode:(AVCaptureExposureMode)exposureMode
+        atDevicePoint:(CGPoint)point
+monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
+{
+    
+    dispatch_async([self sessionQueue], ^{
+        AVCaptureDevice *device = [[self videoDeviceInput] device];
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode])
+            {
+                [device setFocusMode:focusMode];
+                [device setFocusPointOfInterest:point];
+            }
+            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
+            {
+                [device setExposureMode:exposureMode];
+                [device setExposurePointOfInterest:point];
+            }
+            [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    });
+}
+
+- (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
+{
+    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
+    {
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            [device setFlashMode:flashMode];
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    }
+}
+
+///根据类型和摄像头位置返回对应的设备对象
+- (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position
+{
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:mediaType];
+    AVCaptureDevice *captureDevice = [devices firstObject];
+    
+    for (AVCaptureDevice *device in devices)
+    {
+        if ([device position] == position)
+        {
+            captureDevice = device;
+            break;
+        }
+    }
+    
+    return captureDevice;
 }
 
 @end
