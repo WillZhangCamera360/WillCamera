@@ -14,6 +14,7 @@
 
 - (void)awakeFromNib
 {
+    [self addSubview:self.previewGLView];
     self.previewGLView.frame = self.bounds;
 }
 /*

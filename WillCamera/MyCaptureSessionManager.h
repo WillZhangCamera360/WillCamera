@@ -8,10 +8,13 @@
 
 #import <AVFoundation/AVFoundation.h>
 
+@protocol MyCaptureSessionManagerDelegate;
 
 @interface MyCaptureSessionManager : NSObject
 
 SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
+
+@property (weak)id <MyCaptureSessionManagerDelegate> delegate;
 
 ///session
 @property (nonatomic) AVCaptureSession *session;
@@ -23,5 +26,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 - (void)changeCamera;
 ///拍照
 - (void)takePictureWithCompletionBlock:(void (^)(UIImage *image, NSError *error))completionBlock;
+
+@end
+
+
+
+@protocol MyCaptureSessionManagerDelegate <NSObject>
+
+- (void)sessionManager:(MyCaptureSessionManager *)aManager didOutputSourceImage:(CIImage *)aSourceImage;
 
 @end

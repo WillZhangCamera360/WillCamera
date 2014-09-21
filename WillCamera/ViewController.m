@@ -7,15 +7,16 @@
 //
 
 #import "ViewController.h"
-#import "AVCamPreviewView.h"
+//#import "AVCamPreviewView.h"
+#import "AVCamPreviewGLView.h"//这边用GLKview来代替AVCamPreviewView
 #import "MyCaptureSessionManager.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
 
-@interface ViewController ()
+@interface ViewController () <MyCaptureSessionManagerDelegate>
 
 ///动态预览view
-@property (nonatomic, weak)IBOutlet AVCamPreviewView *previewView;
+@property (nonatomic, weak)IBOutlet AVCamPreviewGLView *previewView;
 
 ///拍摄照片之后  预览照片，并决定是否保存
 @property (weak, nonatomic) IBOutlet UIView *picturePreiewView;
@@ -29,7 +30,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [(AVCaptureVideoPreviewLayer *)self.previewView.layer setSession:[MyCaptureSessionManager sharedMyCaptureSessionManager].session];
+    [[MyCaptureSessionManager sharedMyCaptureSessionManager] setDelegate:self];
     
 }
 
@@ -52,6 +53,12 @@
 }
 
 
+#pragma mark - MyCaptureSessionManagerDelegate
+
+- (void)sessionManager:(MyCaptureSessionManager *)aManager didOutputSourceImage:(CIImage *)aSourceImage
+{
+    
+}
 
 #pragma mark - Action
 

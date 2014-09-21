@@ -9,11 +9,13 @@
 #import "MyCaptureSessionManager.h"
 
 
-@interface MyCaptureSessionManager ()
+@interface MyCaptureSessionManager ()  <AVCaptureVideoDataOutputSampleBufferDelegate>
 
 @property (nonatomic) dispatch_queue_t sessionQueue;
+@property (nonatomic) dispatch_queue_t videoOutputQueue;//进行视频输出处理的queue
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+@property (nonatomic) AVCaptureVideoDataOutput *videoDataOutput;
 
 ///设备是否可用
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
@@ -75,10 +77,49 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
                 [session addOutput:stillImageOutput];
                 [self setStillImageOutput:stillImageOutput];
             }
+            
+            
+            //添加videoOutput
+            dispatch_queue_t videoOutputQueue = dispatch_queue_create("videoOutput Queue", DISPATCH_QUEUE_SERIAL);
+            [self setVideoOutputQueue:videoOutputQueue];
+            AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+            [videoDataOutput setSampleBufferDelegate:self queue:videoOutputQueue];
+            
+            if ([session canAddOutput:videoDataOutput]) {
+                [session addOutput:videoDataOutput];
+                [self setVideoDataOutput:videoDataOutput];
+            }
         });
         
     }
     return self;
+}
+
+
+#pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+{
+    
+    
+    CMFormatDescriptionRef formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer);
+    CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDesc);
+    
+    
+    
+    // update the video dimensions information
+    CMVideoDimensions _currentVideoDimensions = CMVideoFormatDescriptionGetDimensions(formatDesc);
+    
+    
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CIImage *sourceImage = [CIImage imageWithCVPixelBuffer:(CVPixelBufferRef)imageBuffer options:nil];
+    
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sessionManager:didOutputSourceImage:)]) {
+        [self.delegate sessionManager:self didOutputSourceImage:sourceImage];
+    }
+    
+
+    
 }
 
 
