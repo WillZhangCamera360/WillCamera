@@ -57,7 +57,7 @@
 
 - (void)sessionManager:(MyCaptureSessionManager *)aManager didOutputSourceImage:(CIImage *)aSourceImage
 {
-    
+    [self.previewView drawImage:aSourceImage];
 }
 
 #pragma mark - Action
@@ -80,6 +80,12 @@
             self.picturePreiewView.hidden = YES;
         }
     }];
+}
+- (IBAction)changeFilter:(id)sender {
+    
+    [[MyCaptureSessionManager sharedMyCaptureSessionManager]setCameraFilterType:
+                                    WillCameraFilterTypeColorDodgeBlendModeBackgroundImage];
+    
 }
 
 - (IBAction)savePictureOperation:(id)sender
@@ -119,8 +125,11 @@
         UIImage *image = self.picturePreiewImageView.image;
         if (image)
         {
+            //If the UIImage object was initialized using a CIImage object, the value of the property is NULL.
+            CIContext *myContext = [CIContext contextWithOptions:@{kCIContextWorkingColorSpace : [NSNull null]}];
+            CGImageRef cgImage = [myContext createCGImage:image.CIImage fromRect:[image.CIImage extent]];
             [self startShowHud];
-            [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
+            [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:cgImage orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
                 [self stopShowHud];
                 [self showTip:@"保存成功"];
                 self.picturePreiewImageView.image = nil;

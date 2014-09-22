@@ -7,6 +7,7 @@
 //
 
 #import "MyCaptureSessionManager.h"
+#import "FilterManager.h"
 
 
 @interface MyCaptureSessionManager ()  <AVCaptureVideoDataOutputSampleBufferDelegate>
@@ -17,8 +18,12 @@
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 @property (nonatomic) AVCaptureVideoDataOutput *videoDataOutput;
 
+@property (assign)WillCameraFilterType filterType;//滤镜种类
+@property (strong) CIImage *colorDodgeBlendModeBackgroundImage;//双重曝光相机下的第一张图片
+
 ///设备是否可用
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
+
 
 
 @property (nonatomic, copy) void (^takePictureCompletionBlock)(UIImage *image, NSError *error);
@@ -82,7 +87,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
             //添加videoOutput
             dispatch_queue_t videoOutputQueue = dispatch_queue_create("videoOutput Queue", DISPATCH_QUEUE_SERIAL);
             [self setVideoOutputQueue:videoOutputQueue];
+
             AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+            videoDataOutput.videoSettings = @{ (id)kCVPixelBufferPixelFormatTypeKey :
+                                                   [NSNumber numberWithInteger:kCVPixelFormatType_32BGRA]};
+            
             [videoDataOutput setSampleBufferDelegate:self queue:videoOutputQueue];
             
             if ([session canAddOutput:videoDataOutput]) {
@@ -97,25 +106,25 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
 
 
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+- (void)captureOutput:(AVCaptureOutput *)captureOutput
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection
 {
-    
-    
-    CMFormatDescriptionRef formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer);
-    CMMediaType mediaType = CMFormatDescriptionGetMediaType(formatDesc);
-    
-    
-    
-    // update the video dimensions information
-    CMVideoDimensions _currentVideoDimensions = CMVideoFormatDescriptionGetDimensions(formatDesc);
-    
-    
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CIImage *sourceImage = [CIImage imageWithCVPixelBuffer:(CVPixelBufferRef)imageBuffer options:nil];
     
+    CIImage *tempImage = [self outputImageWithSourceImage:sourceImage];
+    
+    CIImage *outputImage = nil;
+    if (tempImage) {
+        outputImage = tempImage;
+    }else{
+        outputImage = sourceImage;
+    }
+    
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(sessionManager:didOutputSourceImage:)]) {
-        [self.delegate sessionManager:self didOutputSourceImage:sourceImage];
+        [self.delegate sessionManager:self didOutputSourceImage:outputImage];
     }
     
 
@@ -140,6 +149,18 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
         [[self session] stopRunning];
     });
 }
+
+
+- (void)setCameraFilterType:(WillCameraFilterType)filterType
+{
+    self.filterType = filterType;
+    self.colorDodgeBlendModeBackgroundImage = nil;//如果是刚调整滤镜模式 就把第一张双重曝光的Image清空
+    
+    if (filterType == WillCameraFilterTypeColorDodgeBlendModeBackgroundImage) {
+        
+    }
+}
+
 
 
 - (void)changeCamera
@@ -209,10 +230,30 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
             if (imageDataSampleBuffer)
             {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                UIImage *image = [[UIImage alloc] initWithData:imageData];
+               
+                if (self.filterType == WillCameraFilterTypeColorDodgeBlendModeBackgroundImage) {//双重曝光第一张照片
+
+                    if (!self.colorDodgeBlendModeBackgroundImage) {
+                        dispatch_async(self.videoOutputQueue, ^{
+                            self.colorDodgeBlendModeBackgroundImage = [CIImage imageWithData:imageData];
+                        });
+                        return;
+                    }
+                }
+                
+                CIImage *sourceImage = [CIImage imageWithData:imageData];
+                CIImage *outoutImage = [self outputImageWithSourceImage:sourceImage];
+                self.colorDodgeBlendModeBackgroundImage = nil;
+                
+                UIImage *completionImage = nil;
+                if (outoutImage) {
+                    completionImage = [UIImage imageWithCIImage:outoutImage scale:1.f orientation:UIImageOrientationRight];
+                }else{
+                    completionImage = [UIImage imageWithCIImage:sourceImage scale:1.f orientation:UIImageOrientationRight];
+                }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.takePictureCompletionBlock(image, nil);
+                    self.takePictureCompletionBlock(completionImage, nil);
                 });
             }
         };
@@ -223,7 +264,35 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
     });
 }
 
+
+
+
+
+
 #pragma mark -  Prvite Method
+
+- (CIImage *)outputImageWithSourceImage:(CIImage *)sourceImage
+{
+//        CISepiaTone
+    CIImage *filtedImage = nil;
+    CIFilter *filter = nil;
+    switch (self.filterType) {
+        case WillCameraFilterTypeColorDodgeBlendModeBackgroundImage://双重曝光
+            filter = [[FilterManager sharedFilterManager] colorDodgeBlendModeFilterWithInputImage:sourceImage
+                                                                                  backgroundImage:self.colorDodgeBlendModeBackgroundImage];
+            break;
+            
+        default:
+            break;
+    }
+    filtedImage = [filter outputImage];
+    
+   
+    return filtedImage;
+}
+
+
+
 
 - (void)checkDeviceAuthorizationStatus
 {
