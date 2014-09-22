@@ -245,7 +245,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 CIImage *outoutImage = [self outputImageWithSourceImage:sourceImage];
                 self.colorDodgeBlendModeBackgroundImage = nil;
                 
-                UIImage *completionImage = nil;
+                __weak UIImage *completionImage = nil;
                 if (outoutImage) {
                     completionImage = [UIImage imageWithCIImage:outoutImage scale:1.f orientation:UIImageOrientationRight];
                 }else{
@@ -285,6 +285,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         default:
             break;
     }
+    
+    
+    filter = [CIFilter filterWithName:@"DistortionDemo"];
+    [filter setValue:sourceImage forKey:@"inputImage"];
     filtedImage = [filter outputImage];
     
    

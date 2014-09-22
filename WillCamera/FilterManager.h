@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 typedef enum {
     WillCameraFilterTypeAdditionCompositing,        //影像合成
     WillCameraFilterTypeAffineTransform,            //仿射变换
@@ -65,7 +66,7 @@ typedef enum {
 
 SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(FilterManager)
 
-//双重曝光
+///双重曝光
 - (CIFilter *)colorDodgeBlendModeFilterWithInputImage:(CIImage *)inputImage
                                       backgroundImage:(CIImage *)backgroundImage;
 @end

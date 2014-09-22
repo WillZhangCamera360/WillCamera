@@ -38,7 +38,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
 
 
 #pragma mark - Filter
-
+//双重曝光
 - (CIFilter *)colorDodgeBlendModeFilterWithInputImage:(CIImage *)inputImage
              backgroundImage:(CIImage *)backgroundImage
 {

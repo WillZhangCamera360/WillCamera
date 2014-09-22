@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		A400E52319D0072500A07914 /* FilterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52219D0072500A07914 /* FilterManager.m */; };
+		A400E52719D0270000A07914 /* FilterSelectingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52619D0270000A07914 /* FilterSelectingTableViewController.m */; };
+		A400E53019D02E6300A07914 /* ChromaKey.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52919D02E6300A07914 /* ChromaKey.m */; };
+		A400E53119D02E6300A07914 /* DistortionsDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52A19D02E6300A07914 /* DistortionsDemo.m */; };
+		A400E53219D02E6300A07914 /* OldeFilm.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52B19D02E6300A07914 /* OldeFilm.m */; };
+		A400E53319D02E6300A07914 /* PixellatedPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52C19D02E6300A07914 /* PixellatedPeople.m */; };
+		A400E53419D02E6300A07914 /* PixellateTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52D19D02E6300A07914 /* PixellateTransition.m */; };
+		A400E53519D02E6300A07914 /* Sobel.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52E19D02E6300A07914 /* Sobel.m */; };
+		A400E53619D02E6300A07914 /* TiltShift.m in Sources */ = {isa = PBXBuildFile; fileRef = A400E52F19D02E6300A07914 /* TiltShift.m */; };
 		A4B1AE2A19CBDF4100132CDC /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B1AE2919CBDF4100132CDC /* AssetsLibrary.framework */; };
 		A4B1AE2D19CBFAC300132CDC /* CameraBaiscViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */; };
 		A4B1AE3C19CC370200132CDC /* AVCamPreviewGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */; };
@@ -18,7 +26,6 @@
 		A4CF122319CAB78C00351CA9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4CF122219CAB78C00351CA9 /* Images.xcassets */; };
 		A4CF122619CAB78C00351CA9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4CF122419CAB78C00351CA9 /* LaunchScreen.xib */; };
 		A4CF123219CAB78D00351CA9 /* WillCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF123119CAB78D00351CA9 /* WillCameraTests.m */; };
-		A4CF124119CAC70F00351CA9 /* AVCamPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */; };
 		A4ECA5F119CAD22C00960446 /* MyCaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */; };
 		B8C12F0048864E7B97FE3393 /* libPods-WillCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB185D6A0AFB42B58DE75E82 /* libPods-WillCamera.a */; };
 /* End PBXBuildFile section */
@@ -37,6 +44,15 @@
 		3CF0F6E4E2F043D28F4BF2EC /* Pods-WillCamera.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WillCamera.xcconfig"; path = "Pods/Pods-WillCamera.xcconfig"; sourceTree = "<group>"; };
 		A400E52119D0072500A07914 /* FilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterManager.h; sourceTree = "<group>"; };
 		A400E52219D0072500A07914 /* FilterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterManager.m; sourceTree = "<group>"; };
+		A400E52519D0270000A07914 /* FilterSelectingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterSelectingTableViewController.h; sourceTree = "<group>"; };
+		A400E52619D0270000A07914 /* FilterSelectingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterSelectingTableViewController.m; sourceTree = "<group>"; };
+		A400E52919D02E6300A07914 /* ChromaKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChromaKey.m; sourceTree = "<group>"; };
+		A400E52A19D02E6300A07914 /* DistortionsDemo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistortionsDemo.m; sourceTree = "<group>"; };
+		A400E52B19D02E6300A07914 /* OldeFilm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OldeFilm.m; sourceTree = "<group>"; };
+		A400E52C19D02E6300A07914 /* PixellatedPeople.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PixellatedPeople.m; sourceTree = "<group>"; };
+		A400E52D19D02E6300A07914 /* PixellateTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PixellateTransition.m; sourceTree = "<group>"; };
+		A400E52E19D02E6300A07914 /* Sobel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sobel.m; sourceTree = "<group>"; };
+		A400E52F19D02E6300A07914 /* TiltShift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiltShift.m; sourceTree = "<group>"; };
 		A4B1AE2919CBDF4100132CDC /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		A4B1AE2B19CBFAC300132CDC /* CameraBaiscViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraBaiscViewController.h; sourceTree = "<group>"; };
 		A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraBaiscViewController.m; sourceTree = "<group>"; };
@@ -55,8 +71,6 @@
 		A4CF122B19CAB78D00351CA9 /* WillCameraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WillCameraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CF123019CAB78D00351CA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4CF123119CAB78D00351CA9 /* WillCameraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WillCameraTests.m; sourceTree = "<group>"; };
-		A4CF123F19CAC70F00351CA9 /* AVCamPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamPreviewView.h; sourceTree = "<group>"; };
-		A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamPreviewView.m; sourceTree = "<group>"; };
 		A4ECA5EF19CAD22C00960446 /* MyCaptureSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCaptureSessionManager.h; sourceTree = "<group>"; };
 		A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCaptureSessionManager.m; sourceTree = "<group>"; };
 		A4ECA5F319CAD9D800960446 /* PublicDefineHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefineHeader.h; sourceTree = "<group>"; };
@@ -91,6 +105,31 @@
 				A4B1AE2919CBDF4100132CDC /* AssetsLibrary.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A400E52419D026A200A07914 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A4ECA5EF19CAD22C00960446 /* MyCaptureSessionManager.h */,
+				A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */,
+				A400E52119D0072500A07914 /* FilterManager.h */,
+				A400E52219D0072500A07914 /* FilterManager.m */,
+			);
+			name = Manager;
+			sourceTree = "<group>";
+		};
+		A400E52819D02E4C00A07914 /* Custom Filter */ = {
+			isa = PBXGroup;
+			children = (
+				A400E52919D02E6300A07914 /* ChromaKey.m */,
+				A400E52A19D02E6300A07914 /* DistortionsDemo.m */,
+				A400E52B19D02E6300A07914 /* OldeFilm.m */,
+				A400E52C19D02E6300A07914 /* PixellatedPeople.m */,
+				A400E52D19D02E6300A07914 /* PixellateTransition.m */,
+				A400E52E19D02E6300A07914 /* Sobel.m */,
+				A400E52F19D02E6300A07914 /* TiltShift.m */,
+			);
+			name = "Custom Filter";
 			sourceTree = "<group>";
 		};
 		A4CF120919CAB78C00351CA9 = {
@@ -162,14 +201,12 @@
 				A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */,
 				A4CF121C19CAB78C00351CA9 /* ViewController.h */,
 				A4CF121D19CAB78C00351CA9 /* ViewController.m */,
-				A4CF123F19CAC70F00351CA9 /* AVCamPreviewView.h */,
-				A4CF124019CAC70F00351CA9 /* AVCamPreviewView.m */,
+				A400E52519D0270000A07914 /* FilterSelectingTableViewController.h */,
+				A400E52619D0270000A07914 /* FilterSelectingTableViewController.m */,
 				A4B1AE3A19CC370200132CDC /* AVCamPreviewGLView.h */,
 				A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */,
-				A4ECA5EF19CAD22C00960446 /* MyCaptureSessionManager.h */,
-				A4ECA5F019CAD22C00960446 /* MyCaptureSessionManager.m */,
-				A400E52119D0072500A07914 /* FilterManager.h */,
-				A400E52219D0072500A07914 /* FilterManager.m */,
+				A400E52819D02E4C00A07914 /* Custom Filter */,
+				A400E52419D026A200A07914 /* Manager */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -334,13 +371,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4CF121E19CAB78C00351CA9 /* ViewController.m in Sources */,
+				A400E53019D02E6300A07914 /* ChromaKey.m in Sources */,
 				A4B1AE3C19CC370200132CDC /* AVCamPreviewGLView.m in Sources */,
+				A400E53519D02E6300A07914 /* Sobel.m in Sources */,
 				A4CF121B19CAB78C00351CA9 /* AppDelegate.m in Sources */,
 				A400E52319D0072500A07914 /* FilterManager.m in Sources */,
 				A4B1AE2D19CBFAC300132CDC /* CameraBaiscViewController.m in Sources */,
 				A4ECA5F119CAD22C00960446 /* MyCaptureSessionManager.m in Sources */,
-				A4CF124119CAC70F00351CA9 /* AVCamPreviewView.m in Sources */,
+				A400E53119D02E6300A07914 /* DistortionsDemo.m in Sources */,
+				A400E53219D02E6300A07914 /* OldeFilm.m in Sources */,
+				A400E52719D0270000A07914 /* FilterSelectingTableViewController.m in Sources */,
+				A400E53419D02E6300A07914 /* PixellateTransition.m in Sources */,
+				A400E53319D02E6300A07914 /* PixellatedPeople.m in Sources */,
 				A4CF121819CAB78C00351CA9 /* main.m in Sources */,
+				A400E53619D02E6300A07914 /* TiltShift.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

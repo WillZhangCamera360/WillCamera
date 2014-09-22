@@ -7,20 +7,24 @@
 //
 
 #import "ViewController.h"
-//#import "AVCamPreviewView.h"
-#import "AVCamPreviewGLView.h"//这边用GLKview来代替AVCamPreviewView
+#import "AVCamPreviewGLView.h"
 #import "MyCaptureSessionManager.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "FilterSelectingTableViewController.h"
 
 
-@interface ViewController () <MyCaptureSessionManagerDelegate>
-
+@interface ViewController ()
+        <MyCaptureSessionManagerDelegate, UINavigationControllerDelegate, FilterSelectingTableViewControllerDelegate>
+{
+    NSArray *_customFilters;
+}
 ///动态预览view
 @property (nonatomic, weak)IBOutlet AVCamPreviewGLView *previewView;
 
 ///拍摄照片之后  预览照片，并决定是否保存
 @property (weak, nonatomic) IBOutlet UIView *picturePreiewView;
 @property (weak, nonatomic) IBOutlet UIImageView *picturePreiewImageView;
+
 
 @end
 
@@ -30,7 +34,21 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.delegate = self;
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] setDelegate:self];
+    
+    _customFilters = @[ @"ChromaKey",
+                        @"ColorAccent",
+                        @"PixellatedPeople",
+                        @"TiltShift",
+                        @"OldeFilm",
+                        @"PixellateTransition",
+                        @"DistortionDemo",
+                        @"SobelEdgeH",
+                        @"SobelEdgeV"];
+    
+    
     
 }
 
@@ -50,6 +68,18 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - UINavigationControllerDelegate 
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+
+{
+    if (viewController == self) {
+        navigationController.navigationBarHidden = YES;
+    }else {
+        navigationController.navigationBarHidden = NO;
+    }
 }
 
 
@@ -135,6 +165,7 @@
                 self.picturePreiewImageView.image = nil;
                 self.picturePreiewView.hidden = YES;
             }];
+            CGImageRelease(cgImage);
 
         }else{
             [self showTip:@"未保存成功"];
@@ -145,6 +176,31 @@
         [self showTip:@"放弃保存"];
         self.picturePreiewImageView.image = nil;
         self.picturePreiewView.hidden = YES;
+    }
+    
+}
+
+#pragma mark - FilterSelectingTableViewControllerDelegate
+
+- (void)filterSelectingTableViewController:(FilterSelectingTableViewController *)filterVC didSelectIndex:(NSInteger)index
+{
+    if (index < _customFilters.count) {
+        NSString *filterName = _customFilters[index];
+    }
+}
+
+#pragma mark - Navigation Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"The segue id is %@", segue.identifier );
+    if ([segue.identifier isEqualToString:@"selectFilter"]) {
+        FilterSelectingTableViewController *destination = segue.destinationViewController;
+        if ([destination isKindOfClass:[FilterSelectingTableViewController class]])
+        {
+            destination.dataSourceArr = _customFilters;
+            destination.delegate = self;
+        }
     }
     
 }
