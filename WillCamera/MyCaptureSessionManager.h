@@ -31,6 +31,9 @@
 ///单例
 SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 
+///聚焦
+- (void)focusOnPoint:(CGPoint)interestPoint;
+
 ///设置相机滤镜效果
 - (void)setCameraFilterType:(WillCameraFilterType)filterType;
 

@@ -58,7 +58,9 @@ typedef enum {
     WillCameraFilterTypeVibrance,                    //振动
     WillCameraFilterTypeVignette,                    //印花
     WillCameraFilterTypeWhitePointAdjust,            //白平衡调节
+  
     WillCameraFilterTypeColorDodgeBlendModeBackgroundImage,     //双重曝光相机
+    WillCameraFilterTypeOldFilm,                    //老电影
 } WillCameraFilterType;
 
 
@@ -66,7 +68,15 @@ typedef enum {
 
 SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(FilterManager)
 
-///双重曝光
-- (CIFilter *)colorDodgeBlendModeFilterWithInputImage:(CIImage *)inputImage
-                                      backgroundImage:(CIImage *)backgroundImage;
+///当前滤镜
+@property (assign, readonly)WillCameraFilterType filterType;
+///设置滤镜种类
+- (void)setCameraFilterType:(WillCameraFilterType)aType;
+
+///获取当前filter输出的滤镜之后的照片
+- (CIImage *)outputImageWithCurrentFliterAndInputImage:(CIImage *)inputImage;
+
+///如果是双重曝光的话 此属性用于保存第一张曝光的图片
+@property (strong)CIImage *colorDodgeBlendModeBackgroundImage;
+
 @end
