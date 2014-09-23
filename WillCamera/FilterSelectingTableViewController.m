@@ -31,9 +31,9 @@
 
 #pragma mark - Setter
 
-- (void)setDataSourceArr:(NSArray *)dataSourceArr
+- (void)setDataSourceDic:(NSDictionary *)dataSourceDic
 {
-    _dataSourceArr = dataSourceArr;
+    _dataSourceDic = dataSourceDic;
     [self.tableView reloadData];
 }
 
@@ -41,7 +41,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < self.dataSourceArr.count)
+    if (indexPath.row < self.dataSourceDic.allKeys.count)
     {
         if (self.delegate && [self.delegate respondsToSelector:@selector(filterSelectingTableViewController:didSelectIndex:)])
         {
@@ -62,7 +62,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.dataSourceArr.count;
+    return self.dataSourceDic.allKeys.count;
 }
 
 
@@ -70,7 +70,7 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"filterCell" forIndexPath:indexPath];
 
-    cell.textLabel.text = [self.dataSourceArr[indexPath.row] description];
+    cell.textLabel.text = [self.dataSourceDic.allKeys[indexPath.row] description];
     
     
     return cell;

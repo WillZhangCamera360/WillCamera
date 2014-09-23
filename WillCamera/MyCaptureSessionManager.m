@@ -18,8 +18,6 @@
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 @property (nonatomic) AVCaptureVideoDataOutput *videoDataOutput;
 
-@property (assign)WillCameraFilterType filterType;//滤镜种类
-@property (strong) CIImage *colorDodgeBlendModeBackgroundImage;//双重曝光相机下的第一张图片
 
 ///设备是否可用
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
@@ -153,12 +151,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (void)setCameraFilterType:(WillCameraFilterType)filterType
 {
-    self.filterType = filterType;
-    self.colorDodgeBlendModeBackgroundImage = nil;//如果是刚调整滤镜模式 就把第一张双重曝光的Image清空
-    
-    if (filterType == WillCameraFilterTypeColorDodgeBlendModeBackgroundImage) {
-        
-    }
+    [[FilterManager sharedFilterManager] setCameraFilterType:filterType];
 }
 
 
@@ -231,11 +224,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                
-                if (self.filterType == WillCameraFilterTypeColorDodgeBlendModeBackgroundImage) {//双重曝光第一张照片
+                //双重曝光第一张照片
+                if ([FilterManager sharedFilterManager].filterType == WillCameraFilterTypeColorDodgeBlendModeBackgroundImage)
+                {
 
-                    if (!self.colorDodgeBlendModeBackgroundImage) {
+                    if (![FilterManager sharedFilterManager].colorDodgeBlendModeBackgroundImage) {
                         dispatch_async(self.videoOutputQueue, ^{
-                            self.colorDodgeBlendModeBackgroundImage = [CIImage imageWithData:imageData];
+                            [FilterManager sharedFilterManager].colorDodgeBlendModeBackgroundImage =
+                                                                        [CIImage imageWithData:imageData];
                         });
                         return;
                     }
@@ -243,7 +239,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 
                 CIImage *sourceImage = [CIImage imageWithData:imageData];
                 CIImage *outoutImage = [self outputImageWithSourceImage:sourceImage];
-                self.colorDodgeBlendModeBackgroundImage = nil;
+                [FilterManager sharedFilterManager].colorDodgeBlendModeBackgroundImage = nil;
                 
                 __weak UIImage *completionImage = nil;
                 if (outoutImage) {
@@ -254,6 +250,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.takePictureCompletionBlock(completionImage, nil);
+                    self.takePictureCompletionBlock = nil;
                 });
             }
         };
@@ -266,6 +263,39 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 
 
+///聚焦
+- (void)focusOnPoint:(CGPoint)interestPoint
+{
+    
+    NSLog(@"interestPoint %@", NSStringFromCGPoint(interestPoint));
+    
+    dispatch_async([self sessionQueue], ^{
+        AVCaptureDevice *device = [[self videoDeviceInput] device];
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus])
+            {
+                [device setFocusPointOfInterest:interestPoint];
+                [device setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+            }
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    });
+    
+    return;
+
+        
+    [self focusWithMode:AVCaptureFocusModeAutoFocus
+         exposeWithMode:AVCaptureExposureModeContinuousAutoExposure
+          atDevicePoint:interestPoint
+        monitorSubjectAreaChange:YES];
+}
+
 
 
 
@@ -273,25 +303,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (CIImage *)outputImageWithSourceImage:(CIImage *)sourceImage
 {
-//        CISepiaTone
+
     CIImage *filtedImage = nil;
-    CIFilter *filter = nil;
-    switch (self.filterType) {
-        case WillCameraFilterTypeColorDodgeBlendModeBackgroundImage://双重曝光
-            filter = [[FilterManager sharedFilterManager] colorDodgeBlendModeFilterWithInputImage:sourceImage
-                                                                                  backgroundImage:self.colorDodgeBlendModeBackgroundImage];
-            break;
-            
-        default:
-            break;
-    }
-    
-    
-    filter = [CIFilter filterWithName:@"TiltShift"];
-    [filter setValue:sourceImage forKey:@"inputImage"];
-    filtedImage = [filter outputImage];
-    
-   
+    filtedImage = [[FilterManager sharedFilterManager] outputImageWithCurrentFliterAndInputImage:sourceImage];
     return filtedImage;
 }
 
@@ -346,6 +360,7 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
             if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
             {
                 [device setExposureMode:exposureMode];
+                NSLog(@"interestPoint %@", NSStringFromCGPoint(point));
                 [device setExposurePointOfInterest:point];
             }
             [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
