@@ -287,7 +287,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
     
     
-    filter = [CIFilter filterWithName:@"DistortionDemo"];
+    filter = [CIFilter filterWithName:@"TiltShift"];
     [filter setValue:sourceImage forKey:@"inputImage"];
     filtedImage = [filter outputImage];
     

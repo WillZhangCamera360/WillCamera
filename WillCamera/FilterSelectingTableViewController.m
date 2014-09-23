@@ -41,11 +41,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < self.dataSourceArr.count) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(filterSelectingTableViewController:didSelectIndex:)]) {
+    if (indexPath.row < self.dataSourceArr.count)
+    {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(filterSelectingTableViewController:didSelectIndex:)])
+        {
             [self.delegate filterSelectingTableViewController:self didSelectIndex:indexPath.row];
         }
     }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Table view data source
