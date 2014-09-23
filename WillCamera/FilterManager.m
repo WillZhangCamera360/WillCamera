@@ -47,13 +47,18 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
             currentFilter = [self colorDodgeBlendModeFilterWithInputImage:inputImage backgroundImage:self.colorDodgeBlendModeBackgroundImage];
             break;
         }
-        case WillCameraFilterTypeOldFilm:
+        case WillCameraFilterTypeOldFilm://老电影
         {
             currentFilter = [self oldFilmFilterWithInputImage:inputImage];
             break;
         }
-            
+        case WillCameraFilterTypeHueAdjust://饱和度调节
+        {
+            currentFilter = [self hueAdjustFilterWithInputImage:inputImage];
+            break;
+        }
         default:
+            currentFilter = nil;
             break;
     }
     return currentFilter;
@@ -80,12 +85,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
 
 #pragma mark - Filter
 
-
+///饱和度调节
 - (CIFilter *)hueAdjustFilterWithInputImage:(CIImage *)inputImage
 {
     CIFilter *filter = [CIFilter filterWithName:@"CIHueAdjust"];
     [filter setValue:inputImage forKey:kCIInputImageKey];
-    [filter setValue:@(0.8) forKey:kCIInputAngleKey];
+    [filter setValue:@(22) forKey:kCIInputAngleKey];
     return filter;
 }
 

@@ -55,14 +55,25 @@
                                             <action selector="takePicture:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fOh-jo-tPR"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="无滤镜" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F9G-PW-iyK">
+                                        <rect key="frame" x="465" y="60" width="125" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="125" id="cvR-dV-Wjr"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="msq-yH-pCL" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="20" id="5Yw-aw-BY6"/>
+                                    <constraint firstAttribute="trailing" secondItem="F9G-PW-iyK" secondAttribute="trailing" constant="10" id="ISj-gM-ghZ"/>
                                     <constraint firstItem="ZWN-Wy-n97" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="20" id="Iyy-qo-kc7"/>
                                     <constraint firstAttribute="trailing" secondItem="ZWN-Wy-n97" secondAttribute="trailing" constant="8" id="K5k-oj-rnt"/>
                                     <constraint firstAttribute="centerX" secondItem="Y6v-Gg-PXF" secondAttribute="centerX" id="NBJ-QJ-AD4"/>
                                     <constraint firstAttribute="bottom" secondItem="Y6v-Gg-PXF" secondAttribute="bottom" constant="5" id="RRK-3C-IZB"/>
+                                    <constraint firstItem="F9G-PW-iyK" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="60" id="Vy9-lN-k0b"/>
                                     <constraint firstItem="msq-yH-pCL" firstAttribute="leading" secondItem="T1Y-aG-lmn" secondAttribute="leading" constant="8" id="eaq-32-xDT"/>
                                 </constraints>
                             </view>
@@ -129,7 +140,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="giX-0a-Agq"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="filterNameLabel" destination="F9G-PW-iyK" id="fDS-Uf-stE"/>
                         <outlet property="picturePreiewImageView" destination="rGz-j1-905" id="H3H-tC-CTk"/>
                         <outlet property="picturePreiewView" destination="RzX-Mq-3Ls" id="EyD-9O-Uru"/>
                         <outlet property="previewView" destination="T1Y-aG-lmn" id="wDo-J6-b0F"/>

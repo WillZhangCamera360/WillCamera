@@ -14,7 +14,7 @@
 
 @interface FilterSelectingTableViewController : UITableViewController
 
-@property (nonatomic, strong)NSArray *dataSourceArr;
+@property (nonatomic, strong)NSDictionary *dataSourceDic;
 @property (nonatomic, weak)id <FilterSelectingTableViewControllerDelegate>delegate;
 
 @end

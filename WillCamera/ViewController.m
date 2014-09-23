@@ -16,7 +16,7 @@
 @interface ViewController ()
         <MyCaptureSessionManagerDelegate, UINavigationControllerDelegate, FilterSelectingTableViewControllerDelegate>
 {
-    NSArray *_customFilters;
+    NSDictionary *_customFiltersDic;
 }
 ///动态预览view
 @property (nonatomic, weak)IBOutlet AVCamPreviewGLView *previewView;
@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIView *picturePreiewView;
 @property (weak, nonatomic) IBOutlet UIImageView *picturePreiewImageView;
 
+@property (weak, nonatomic) IBOutlet UILabel *filterNameLabel;
 
 @end
 
@@ -38,17 +39,14 @@
     self.navigationController.delegate = self;
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] setDelegate:self];
     
-    _customFilters = @[ @"ChromaKey",
-                        @"ColorAccent",
-                        @"PixellatedPeople",
-                        @"TiltShift",
-                        @"OldeFilm",
-                        @"PixellateTransition",
-                        @"DistortionDemo",
-                        @"SobelEdgeH",
-                        @"SobelEdgeV"];
     
-    
+//    WillCameraFilterTypeColorDodgeBlendModeBackgroundImage,     //双重曝光相机
+//    WillCameraFilterTypeOldFilm,                    //老电影
+
+    NSDictionary *filtersDic = @{@"双重曝光":@(WillCameraFilterTypeColorDodgeBlendModeBackgroundImage),
+                                 @"老电影":@(WillCameraFilterTypeOldFilm),
+                                 @"饱和度调节":@(WillCameraFilterTypeHueAdjust)};
+    _customFiltersDic = filtersDic;
     
 }
 
@@ -72,14 +70,32 @@
 
 #pragma mark - UINavigationControllerDelegate 
 
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (viewController == self) {
         navigationController.navigationBarHidden = YES;
     }else {
         navigationController.navigationBarHidden = NO;
     }
+}
+
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *anyTouch = [touches anyObject];
+    CGPoint touchPoint = [anyTouch locationInView:anyTouch.window];
+    
+    NSLog(@"%@,%@", NSStringFromCGRect(anyTouch.window.frame), NSStringFromCGPoint(touchPoint));
+    
+    CGRect windowFrame = anyTouch.window.frame;
+    CGFloat xPersent = touchPoint.x / windowFrame.size.width;
+    CGFloat yPersent = touchPoint.y / windowFrame.size.height;
+    
+    //    A value of (0,0) indicates that the camera should focus on the top left corner of the image, while a value of (1,1) indicates that it should focus on the bottom right.
+    CGPoint interestPoint = CGPointMake(xPersent, yPersent);
+    
+    [[MyCaptureSessionManager sharedMyCaptureSessionManager] focusOnPoint:interestPoint];
 }
 
 
@@ -184,8 +200,11 @@
 
 - (void)filterSelectingTableViewController:(FilterSelectingTableViewController *)filterVC didSelectIndex:(NSInteger)index
 {
-    if (index < _customFilters.count) {
-        NSString *filterName = _customFilters[index];
+    if (index < _customFiltersDic.allKeys.count) {
+        NSString *filterNameKey = _customFiltersDic.allKeys[index];
+        self.filterNameLabel.text = filterNameKey;
+        WillCameraFilterType selectedType = [_customFiltersDic[filterNameKey] integerValue];
+        [[MyCaptureSessionManager sharedMyCaptureSessionManager] setCameraFilterType:selectedType];
     }
 }
 
@@ -198,7 +217,7 @@
         FilterSelectingTableViewController *destination = segue.destinationViewController;
         if ([destination isKindOfClass:[FilterSelectingTableViewController class]])
         {
-            destination.dataSourceArr = _customFilters;
+            destination.dataSourceDic = _customFiltersDic;
             destination.delegate = self;
         }
     }

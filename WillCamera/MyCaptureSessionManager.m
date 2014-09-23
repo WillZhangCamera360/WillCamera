@@ -250,6 +250,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.takePictureCompletionBlock(completionImage, nil);
+                    self.takePictureCompletionBlock = nil;
                 });
             }
         };
@@ -265,8 +266,32 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 ///聚焦
 - (void)focusOnPoint:(CGPoint)interestPoint
 {
+    
+    NSLog(@"interestPoint %@", NSStringFromCGPoint(interestPoint));
+    
+    dispatch_async([self sessionQueue], ^{
+        AVCaptureDevice *device = [[self videoDeviceInput] device];
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus])
+            {
+                [device setFocusPointOfInterest:interestPoint];
+                [device setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+            }
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    });
+    
+    return;
+
+        
     [self focusWithMode:AVCaptureFocusModeAutoFocus
-         exposeWithMode:AVCaptureExposureModeAutoExpose
+         exposeWithMode:AVCaptureExposureModeContinuousAutoExposure
           atDevicePoint:interestPoint
         monitorSubjectAreaChange:YES];
 }
@@ -335,6 +360,7 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
             if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
             {
                 [device setExposureMode:exposureMode];
+                NSLog(@"interestPoint %@", NSStringFromCGPoint(point));
                 [device setExposurePointOfInterest:point];
             }
             [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];

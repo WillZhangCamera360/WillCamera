@@ -32,7 +32,7 @@ typedef enum {
     WillCameraFilterTypeGaussianGradient,            //高斯梯度
     WillCameraFilterTypeHardLightBlendMode,          //强光混合模式
     WillCameraFilterTypeHighlightShadowAdjust,       //高亮阴影调节
-    WillCameraFilterTypeHueAdjust,                   //饱和度调节
+    
     WillCameraFilterTypeHueBlendMode,                //饱和度混合模式
     WillCameraFilterTypeLightenBlendMode,
     WillCameraFilterTypeLinearGradient,              //线性梯度
@@ -61,6 +61,7 @@ typedef enum {
   
     WillCameraFilterTypeColorDodgeBlendModeBackgroundImage,     //双重曝光相机
     WillCameraFilterTypeOldFilm,                    //老电影
+    WillCameraFilterTypeHueAdjust,                   //饱和度调节
 } WillCameraFilterType;
 
 
