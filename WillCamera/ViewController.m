@@ -24,8 +24,11 @@
 ///拍摄照片之后  预览照片，并决定是否保存
 @property (weak, nonatomic) IBOutlet UIView *picturePreiewView;
 @property (weak, nonatomic) IBOutlet UIImageView *picturePreiewImageView;
-
 @property (weak, nonatomic) IBOutlet UILabel *filterNameLabel;
+
+@property (strong, nonatomic) UIView *focusView;
+//帧率按钮
+@property (weak, nonatomic) IBOutlet UIButton *minFrameDurationButton;
 
 @end
 
@@ -47,6 +50,7 @@
                                  @"老电影":@(WillCameraFilterTypeOldFilm),
                                  @"饱和度调节":@(WillCameraFilterTypeHueAdjust)};
     _customFiltersDic = filtersDic;
+    [self.view addSubview:self.focusView];
     
 }
 
@@ -54,6 +58,9 @@
 {
     [super viewDidAppear:animated];
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] startRuning];
+    CMTime currentFrameDuration = [MyCaptureSessionManager sharedMyCaptureSessionManager].minFrameDuration;
+    CGFloat nowFrame = currentFrameDuration.timescale/currentFrameDuration.value;
+    [self.minFrameDurationButton setTitle:[NSString stringWithFormat:@"帧率:%f", nowFrame] forState:UIControlStateNormal];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -80,11 +87,22 @@
     }
 }
 
+#pragma mark - Touch Event
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *anyTouch = [touches anyObject];
     CGPoint touchPoint = [anyTouch locationInView:anyTouch.window];
+    
+    self.focusView.center = touchPoint;
+    self.focusView.hidden = NO;
+    [self.view bringSubviewToFront:self.focusView];
+    self.focusView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+    [UIView animateWithDuration:1.f animations:^{
+        self.focusView.transform = CGAffineTransformMakeScale(1.f, 1.f);
+    } completion:^(BOOL finished) {
+        self.focusView.hidden = YES;
+    }];
     
     NSLog(@"%@,%@", NSStringFromCGRect(anyTouch.window.frame), NSStringFromCGPoint(touchPoint));
     
@@ -127,29 +145,70 @@
         }
     }];
 }
-- (IBAction)changeFilter:(id)sender {
+
+//切换闪光模式
+- (IBAction)changeFlashType:(id)sender
+{
+    MyCaptureSessionManager *sharedManager = [MyCaptureSessionManager sharedMyCaptureSessionManager];
+
+    UIButton *focusButton = (UIButton *)sender;
     
-    [[MyCaptureSessionManager sharedMyCaptureSessionManager]setCameraFilterType:
-                                    WillCameraFilterTypeColorDodgeBlendModeBackgroundImage];
+    switch (sharedManager.flashMode) {
+        case AVCaptureFlashModeAuto:
+        {
+            [sharedManager setCameraFlashMode:AVCaptureFlashModeOn];
+            [focusButton setTitle:@"开启闪光" forState:UIControlStateNormal];
+            break;
+        }
+            
+        case AVCaptureFlashModeOn:
+        {
+            [sharedManager setCameraFlashMode:AVCaptureFlashModeOff];
+            [focusButton setTitle:@"关闭闪光" forState:UIControlStateNormal];
+            break;
+        }
+            
+        case AVCaptureFlashModeOff:
+        {
+            [sharedManager setCameraFlashMode:AVCaptureFlashModeAuto];
+            [focusButton setTitle:@"自动闪光" forState:UIControlStateNormal];
+            break;
+        }
+            
+        default:
+            break;
+    };
+}
+
+//开始或者停止照相机
+- (IBAction)cameraOpenOption:(id)sender
+{
+    MyCaptureSessionManager *sharedManager = [MyCaptureSessionManager sharedMyCaptureSessionManager];
+    if (sharedManager.session.isRunning) {
+        [(UIButton *)sender setTitle:@"开始" forState:UIControlStateNormal];
+        [[MyCaptureSessionManager sharedMyCaptureSessionManager] stopRuning];
+    }else{ 
+        [(UIButton *)sender setTitle:@"停止" forState:UIControlStateNormal];
+        [[MyCaptureSessionManager sharedMyCaptureSessionManager] startRuning];
+    }
     
 }
 
+//保存操作
 - (IBAction)savePictureOperation:(id)sender
 {
-    if ([sender isKindOfClass:[UIButton class]]) {
+    if ([sender isKindOfClass:[UIButton class]])
+    {
         UIButton *aButton = (UIButton *)sender;
         switch (aButton.tag) {
             case 99:
             {
-                [self showTip:@"hahaha"];
-                NSLog(@"存储");
                 [self savePictureOrNot:YES];
                 break;
             }
             
             case 100:
             {
-                NSLog(@"放弃");
                 [self startShowHud];
                 [self savePictureOrNot:NO];
                 break;
@@ -161,6 +220,26 @@
     }
 }
 
+//切换帧率
+- (IBAction)changFrameDuration:(id)sender
+{
+    MyCaptureSessionManager *sharedManager = [MyCaptureSessionManager sharedMyCaptureSessionManager];
+    CMTime currentMinFrameDuration = sharedManager.minFrameDuration;
+    
+    NSInteger timeScale = currentMinFrameDuration.timescale;
+    if (timeScale < 4) {
+        timeScale = 30;
+    }else{
+        timeScale -= 10;
+    }
+    
+    [sharedManager configureCameraWithMinFrameDuration:CMTimeMake(1, timeScale)];
+    
+    currentMinFrameDuration = sharedManager.minFrameDuration;
+    CGFloat nowFrame = currentMinFrameDuration.timescale / currentMinFrameDuration.value;
+    [self.minFrameDurationButton setTitle:[NSString stringWithFormat:@"帧率:%f", nowFrame] forState:UIControlStateNormal];
+    
+}
 
 #pragma mark - Tools
 
@@ -222,6 +301,23 @@
         }
     }
     
+}
+
+
+#pragma mark - Getter
+
+- (UIView *)focusView
+{
+    if (!_focusView) {
+        _focusView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _focusView.backgroundColor = [UIColor clearColor];
+        _focusView.layer.cornerRadius = _focusView.frame.size.height/2;
+        _focusView.layer.borderWidth = .5f;
+        _focusView.layer.borderColor = [[UIColor greenColor] CGColor];
+        _focusView.hidden = YES;
+    }
+    
+    return _focusView;
 }
 
 @end

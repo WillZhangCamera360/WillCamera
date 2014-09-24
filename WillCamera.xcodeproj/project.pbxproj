@@ -132,6 +132,36 @@
 			name = "Custom Filter";
 			sourceTree = "<group>";
 		};
+		A41CEE5F19D25687005F561B /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				A4ECA5F319CAD9D800960446 /* PublicDefineHeader.h */,
+			);
+			name = Header;
+			sourceTree = "<group>";
+		};
+		A41CEE6019D256A0005F561B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A4B1AE2B19CBFAC300132CDC /* CameraBaiscViewController.h */,
+				A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */,
+				A4CF121C19CAB78C00351CA9 /* ViewController.h */,
+				A4CF121D19CAB78C00351CA9 /* ViewController.m */,
+				A400E52519D0270000A07914 /* FilterSelectingTableViewController.h */,
+				A400E52619D0270000A07914 /* FilterSelectingTableViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		A41CEE6119D256AD005F561B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A4B1AE3A19CC370200132CDC /* AVCamPreviewGLView.h */,
+				A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		A4CF120919CAB78C00351CA9 = {
 			isa = PBXGroup;
 			children = (
@@ -194,17 +224,11 @@
 		A4CF123B19CAC56900351CA9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A4ECA5F319CAD9D800960446 /* PublicDefineHeader.h */,
 				A4CF121919CAB78C00351CA9 /* AppDelegate.h */,
 				A4CF121A19CAB78C00351CA9 /* AppDelegate.m */,
-				A4B1AE2B19CBFAC300132CDC /* CameraBaiscViewController.h */,
-				A4B1AE2C19CBFAC300132CDC /* CameraBaiscViewController.m */,
-				A4CF121C19CAB78C00351CA9 /* ViewController.h */,
-				A4CF121D19CAB78C00351CA9 /* ViewController.m */,
-				A400E52519D0270000A07914 /* FilterSelectingTableViewController.h */,
-				A400E52619D0270000A07914 /* FilterSelectingTableViewController.m */,
-				A4B1AE3A19CC370200132CDC /* AVCamPreviewGLView.h */,
-				A4B1AE3B19CC370200132CDC /* AVCamPreviewGLView.m */,
+				A41CEE5F19D25687005F561B /* Header */,
+				A41CEE6019D256A0005F561B /* Controllers */,
+				A41CEE6119D256AD005F561B /* Views */,
 				A400E52819D02E4C00A07914 /* Custom Filter */,
 				A400E52419D026A200A07914 /* Manager */,
 			);

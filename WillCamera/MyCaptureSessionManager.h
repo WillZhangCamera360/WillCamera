@@ -18,6 +18,7 @@
 @interface MyCaptureSessionManager : NSObject
 
 @property (weak)id <MyCaptureSessionManagerDelegate> delegate;
+
 ///session
 @property (nonatomic) AVCaptureSession *session;
 ///session 运行
@@ -28,6 +29,7 @@
 - (void)changeCamera;
 ///拍照
 - (void)takePictureWithCompletionBlock:(void (^)(UIImage *image, NSError *error))completionBlock;
+
 ///单例
 SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 
@@ -37,6 +39,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 ///设置相机滤镜效果
 - (void)setCameraFilterType:(WillCameraFilterType)filterType;
 
+///设置最小振时间（最大帧率）
+- (void)configureCameraWithMinFrameDuration:(CMTime)timeDuration;
+@property (readonly, assign)CMTime minFrameDuration;
+
+///设置闪光灯类型
+- (void)setCameraFlashMode:(AVCaptureFlashMode)flashMode;
+@property (readonly, assign)AVCaptureFlashMode flashMode;
 
 @end
 

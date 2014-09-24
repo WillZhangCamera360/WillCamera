@@ -41,6 +41,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
     self = [super init];
     if (self) {
         
+        _flashMode = AVCaptureFlashModeAuto;
         // 创建 AVCaptureSession
         AVCaptureSession *session = [[AVCaptureSession alloc] init];
         [self setSession:session];
@@ -58,6 +59,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
             
             AVCaptureDevice *videoDevice = [self deviceWithMediaType:AVMediaTypeVideo
                                                   preferringPosition:AVCaptureDevicePositionBack];
+            //设置为最佳分辨率
+            [self configureCameraForHighestFrameRate:videoDevice];
+            _minFrameDuration = videoDevice.activeVideoMinFrameDuration;
             AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
                                                                                            error:&error];
             
@@ -206,9 +210,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.takePictureCompletionBlock = completionBlock;
     dispatch_async([self sessionQueue], ^{
         
-        // Flash set to Auto for Still Capture
-        [self setFlashMode:AVCaptureFlashModeAuto forDevice:[[self videoDeviceInput] device]];
-        
         
         void (^captureStillImageCompletionHandler)(CMSampleBufferRef imageDataSampleBuffer, NSError *error) =
         ^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
@@ -286,14 +287,28 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             NSLog(@"%@", error);
         }
     });
-    
-    return;
+}
 
-        
-    [self focusWithMode:AVCaptureFocusModeAutoFocus
-         exposeWithMode:AVCaptureExposureModeContinuousAutoExposure
-          atDevicePoint:interestPoint
-        monitorSubjectAreaChange:YES];
+///设置帧率
+- (void)configureCameraWithMinFrameDuration:(CMTime)timeDuration
+{
+    _minFrameDuration = timeDuration;
+    dispatch_async([self sessionQueue], ^{
+        AVCaptureDevice *currentVideoDevice = [[self videoDeviceInput] device];
+        [self configureCameraWithMinFrameDuration:timeDuration device:currentVideoDevice];
+    });
+}
+
+
+//设置闪光灯类型
+- (void)setCameraFlashMode:(AVCaptureFlashMode)flashMode
+{
+    _flashMode = flashMode;
+    
+    dispatch_async([self sessionQueue], ^{
+        AVCaptureDevice *currentVideoDevice = [[self videoDeviceInput] device];
+        [self setFlashMode:flashMode forDevice:currentVideoDevice];
+    });
 }
 
 
@@ -303,7 +318,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (CIImage *)outputImageWithSourceImage:(CIImage *)sourceImage
 {
-
     CIImage *filtedImage = nil;
     filtedImage = [[FilterManager sharedFilterManager] outputImageWithCurrentFliterAndInputImage:sourceImage];
     return filtedImage;
@@ -339,8 +353,26 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 
-#pragma mark Device Configuration
+#pragma mark - Device Configuration
 
+- (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
+{
+    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
+    {
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            [device setFlashMode:flashMode];
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    }
+}
+
+//设置 对焦模式  曝光模式 和 对焦点
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode
        exposeWithMode:(AVCaptureExposureMode)exposureMode
         atDevicePoint:(CGPoint)point
@@ -373,22 +405,7 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
     });
 }
 
-- (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
-{
-    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
-    {
-        NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
-            [device setFlashMode:flashMode];
-            [device unlockForConfiguration];
-        }
-        else
-        {
-            NSLog(@"%@", error);
-        }
-    }
-}
+
 
 ///根据类型和摄像头位置返回对应的设备对象
 - (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position
@@ -407,5 +424,60 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
     
     return captureDevice;
 }
+
+//配置成为最佳帧率
+- (void)configureCameraForHighestFrameRate:(AVCaptureDevice *)device
+{
+    
+    AVCaptureDeviceFormat *bestFormat = nil;
+    AVFrameRateRange *bestFrameRateRange = nil;
+    for ( AVCaptureDeviceFormat *format in [device formats] ) {
+        for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges ) {
+            if ( range.maxFrameRate > bestFrameRateRange.maxFrameRate ) {
+                bestFormat = format;
+                bestFrameRateRange = range;
+            }
+        }
+    }
+    if ( bestFormat ) {
+        if ( [device lockForConfiguration:NULL] == YES ) {
+            device.activeFormat = bestFormat;
+            device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
+            device.activeVideoMaxFrameDuration = bestFrameRateRange.minFrameDuration;
+            [device unlockForConfiguration];
+        }
+    }
+    
+    
+}
+
+
+//配置成指定帧率
+- (void)configureCameraWithMinFrameDuration:(CMTime)timeDuration device:(AVCaptureDevice *)device
+{
+    CMTime currentMinFrameDuration = device.activeVideoMinFrameDuration;
+    
+    NSMutableArray *tempLitterArr = [NSMutableArray array];
+    for ( AVCaptureDeviceFormat *format in [device formats] ) {
+        for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges ) {
+            NSInteger result = CMTimeCompare(currentMinFrameDuration, range.minFrameDuration);
+            if (result <0 ) {
+                [tempLitterArr addObject:range];
+            }
+        }
+    }
+    
+    
+    
+    if ( [device lockForConfiguration:NULL] == YES )
+    {
+        CMTime maxDuration = CMTimeMake(1, 2);//一秒两帧
+        device.activeVideoMinFrameDuration = timeDuration;
+        device.activeVideoMaxFrameDuration = maxDuration;
+        [device unlockForConfiguration];
+    }
+
+}
+
 
 @end

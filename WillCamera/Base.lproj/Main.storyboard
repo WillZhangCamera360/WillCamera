@@ -30,6 +30,26 @@
                                             <action selector="changeCamera:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="b3U-xn-2pP"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mk4-h7-pnS" userLabel="自动闪光">
+                                        <rect key="frame" x="101" y="20" width="60" height="30"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <state key="normal" title="自动闪光">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="changeFlashType:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="T49-Kj-rfL"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lLR-HC-hOb" userLabel="帧率">
+                                        <rect key="frame" x="179" y="20" width="52" height="30"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <state key="normal" title="帧率:40">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="changFrameDuration:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="LqK-b0-PVV"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZWN-Wy-n97">
                                         <rect key="frame" x="547" y="20" width="45" height="30"/>
                                         <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -37,7 +57,6 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="changeFilter:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="tUt-Di-ifz"/>
                                             <segue destination="wuF-sL-7e2" kind="show" identifier="selectFilter" id="A9p-kN-JYG"/>
                                         </connections>
                                     </button>
@@ -55,6 +74,20 @@
                                             <action selector="takePicture:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fOh-jo-tPR"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PmX-JR-Xnq" userLabel="启动">
+                                        <rect key="frame" x="10" y="550" width="50" height="40"/>
+                                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="pBd-TL-1Wn"/>
+                                            <constraint firstAttribute="width" constant="50" id="z2b-YH-eoJ"/>
+                                        </constraints>
+                                        <state key="normal" title="停止">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="cameraOpenOption:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="2FK-Rv-PIO"/>
+                                        </connections>
+                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="无滤镜" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F9G-PW-iyK">
                                         <rect key="frame" x="465" y="60" width="125" height="21"/>
                                         <constraints>
@@ -67,14 +100,20 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="Mk4-h7-pnS" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="20" id="1AI-4b-shn"/>
                                     <constraint firstItem="msq-yH-pCL" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="20" id="5Yw-aw-BY6"/>
+                                    <constraint firstItem="lLR-HC-hOb" firstAttribute="leading" secondItem="Mk4-h7-pnS" secondAttribute="trailing" constant="18" id="FMI-de-uEE"/>
                                     <constraint firstAttribute="trailing" secondItem="F9G-PW-iyK" secondAttribute="trailing" constant="10" id="ISj-gM-ghZ"/>
                                     <constraint firstItem="ZWN-Wy-n97" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="20" id="Iyy-qo-kc7"/>
+                                    <constraint firstItem="PmX-JR-Xnq" firstAttribute="leading" secondItem="T1Y-aG-lmn" secondAttribute="leading" constant="10" id="JNx-zN-5nB"/>
                                     <constraint firstAttribute="trailing" secondItem="ZWN-Wy-n97" secondAttribute="trailing" constant="8" id="K5k-oj-rnt"/>
                                     <constraint firstAttribute="centerX" secondItem="Y6v-Gg-PXF" secondAttribute="centerX" id="NBJ-QJ-AD4"/>
+                                    <constraint firstItem="Mk4-h7-pnS" firstAttribute="leading" secondItem="msq-yH-pCL" secondAttribute="trailing" constant="18" id="OXM-mK-aJQ"/>
                                     <constraint firstAttribute="bottom" secondItem="Y6v-Gg-PXF" secondAttribute="bottom" constant="5" id="RRK-3C-IZB"/>
+                                    <constraint firstItem="lLR-HC-hOb" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="20" id="TQ3-6f-3Q9"/>
                                     <constraint firstItem="F9G-PW-iyK" firstAttribute="top" secondItem="T1Y-aG-lmn" secondAttribute="top" constant="60" id="Vy9-lN-k0b"/>
                                     <constraint firstItem="msq-yH-pCL" firstAttribute="leading" secondItem="T1Y-aG-lmn" secondAttribute="leading" constant="8" id="eaq-32-xDT"/>
+                                    <constraint firstAttribute="bottom" secondItem="PmX-JR-Xnq" secondAttribute="bottom" constant="10" id="fJg-Ft-O2f"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RzX-Mq-3Ls">
@@ -143,6 +182,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="filterNameLabel" destination="F9G-PW-iyK" id="fDS-Uf-stE"/>
+                        <outlet property="minFrameDurationButton" destination="lLR-HC-hOb" id="o2u-EA-bq8"/>
                         <outlet property="picturePreiewImageView" destination="rGz-j1-905" id="H3H-tC-CTk"/>
                         <outlet property="picturePreiewView" destination="RzX-Mq-3Ls" id="EyD-9O-Uru"/>
                         <outlet property="previewView" destination="T1Y-aG-lmn" id="wDo-J6-b0F"/>
