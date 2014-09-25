@@ -41,7 +41,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
 - (CIFilter *)currentFilterWithInputImage:(CIImage *)inputImage
 {
     CIFilter *currentFilter = nil;
-    switch (self.filterType) {
+    switch (self.filterType)
+    {
         case WillCameraFilterTypeColorDodgeBlendModeBackgroundImage://双重曝光相机
         {
             currentFilter = [self colorDodgeBlendModeFilterWithInputImage:inputImage backgroundImage:self.colorDodgeBlendModeBackgroundImage];
@@ -57,6 +58,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
             currentFilter = [self hueAdjustFilterWithInputImage:inputImage];
             break;
         }
+        case WillCameraFilterTypeCISepiaTone://乌色
+        {
+            currentFilter = [self sepiaToneFilterWithInputImage:inputImage];
+            break;
+        }
+            
+            
         default:
             currentFilter = nil;
             break;
@@ -94,7 +102,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
     return filter;
 }
 
-//CISepiaTone
+//CISepiaTone  乌色
+- (CIFilter *)sepiaToneFilterWithInputImage:(CIImage *)inputImage
+{
+    CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"];
+    [filter setValue:inputImage forKey:kCIInputImageKey];
+    return filter;
+}
+
+
 ///双重曝光滤镜
 - (CIFilter *)colorDodgeBlendModeFilterWithInputImage:(CIImage *)inputImage
              backgroundImage:(CIImage *)backgroundImage

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+///viewController的基类
 @interface CameraBaiscViewController : UIViewController
 
 ///显示hud

@@ -11,7 +11,7 @@
 @protocol FilterSelectingTableViewControllerDelegate;
 
 
-
+///选择滤镜种类
 @interface FilterSelectingTableViewController : UITableViewController
 
 @property (nonatomic, strong)NSDictionary *dataSourceDic;

@@ -10,6 +10,12 @@
 #import "FilterManager.h"
 
 
+typedef enum {
+    WillCameraPresetModeHeigh,     //高分辨率
+    WillCameraPresetModeMiddel,    //一般分辨率
+    WillCameraPresetModeLow,       //低分辨率
+} WillCameraPresetMode;
+
 
 @protocol MyCaptureSessionManagerDelegate;
 
@@ -39,13 +45,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 ///设置相机滤镜效果
 - (void)setCameraFilterType:(WillCameraFilterType)filterType;
 
-///设置最小振时间（最大帧率）
-- (void)configureCameraWithMinFrameDuration:(CMTime)timeDuration;
-@property (readonly, assign)CMTime minFrameDuration;
-
 ///设置闪光灯类型
 - (void)setCameraFlashMode:(AVCaptureFlashMode)flashMode;
 @property (readonly, assign)AVCaptureFlashMode flashMode;
+
+///设置预览分辨率
+- (void)setCameraPresetMode:(WillCameraPresetMode)persetMode;
+@property (readonly, assign)WillCameraPresetMode persetMode;
+
 
 @end
 

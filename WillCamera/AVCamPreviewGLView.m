@@ -61,7 +61,8 @@
 
 - (void)drawImage:(CIImage *)im
 {
-    if (!alreadyAwake) {
+    if (!alreadyAwake)
+    {
         return;
     }
     
@@ -70,7 +71,8 @@
     
     NSValue *previewFrameValue = [NSValue valueWithCGRect:previewFrame];
   
-    if (![previewFrameValue isEqualToValue:[NSValue valueWithCGRect:self.previewGLView.frame]]) {
+    if (![previewFrameValue isEqualToValue:[NSValue valueWithCGRect:self.previewGLView.frame]])
+    {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.previewGLView.frame = previewFrame;
         });

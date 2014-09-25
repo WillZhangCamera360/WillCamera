@@ -23,11 +23,13 @@
 
 ///拍摄照片之后  预览照片，并决定是否保存
 @property (weak, nonatomic) IBOutlet UIView *picturePreiewView;
+///照片预览
 @property (weak, nonatomic) IBOutlet UIImageView *picturePreiewImageView;
+///滤镜名称
 @property (weak, nonatomic) IBOutlet UILabel *filterNameLabel;
-
+///聚焦显示层
 @property (strong, nonatomic) UIView *focusView;
-//帧率按钮
+///帧率按钮
 @property (weak, nonatomic) IBOutlet UIButton *minFrameDurationButton;
 
 @end
@@ -43,12 +45,11 @@
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] setDelegate:self];
     
     
-//    WillCameraFilterTypeColorDodgeBlendModeBackgroundImage,     //双重曝光相机
-//    WillCameraFilterTypeOldFilm,                    //老电影
 
     NSDictionary *filtersDic = @{@"双重曝光":@(WillCameraFilterTypeColorDodgeBlendModeBackgroundImage),
                                  @"老电影":@(WillCameraFilterTypeOldFilm),
-                                 @"饱和度调节":@(WillCameraFilterTypeHueAdjust)};
+                                 @"饱和度调节":@(WillCameraFilterTypeHueAdjust),
+                                 @"乌色":@(WillCameraFilterTypeCISepiaTone)};
     _customFiltersDic = filtersDic;
     [self.view addSubview:self.focusView];
     
@@ -58,9 +59,7 @@
 {
     [super viewDidAppear:animated];
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] startRuning];
-    CMTime currentFrameDuration = [MyCaptureSessionManager sharedMyCaptureSessionManager].minFrameDuration;
-    CGFloat nowFrame = currentFrameDuration.timescale/currentFrameDuration.value;
-    [self.minFrameDurationButton setTitle:[NSString stringWithFormat:@"帧率:%f", nowFrame] forState:UIControlStateNormal];
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -80,9 +79,12 @@
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    if (viewController == self) {
+    if (viewController == self)
+    {
         navigationController.navigationBarHidden = YES;
-    }else {
+    }
+    else
+    {
         navigationController.navigationBarHidden = NO;
     }
 }
@@ -136,10 +138,13 @@
 - (IBAction)takePicture:(id)sender
 {
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] takePictureWithCompletionBlock:^(UIImage *image, NSError *error) {
-        if (image) {
+        if (image)
+        {
             self.picturePreiewImageView.image = image;
             self.picturePreiewView.hidden = NO;
-        }else{
+        }
+        else
+        {
             self.picturePreiewImageView.image = nil;
             self.picturePreiewView.hidden = YES;
         }
@@ -153,7 +158,8 @@
 
     UIButton *focusButton = (UIButton *)sender;
     
-    switch (sharedManager.flashMode) {
+    switch (sharedManager.flashMode)
+    {
         case AVCaptureFlashModeAuto:
         {
             [sharedManager setCameraFlashMode:AVCaptureFlashModeOn];
@@ -184,10 +190,13 @@
 - (IBAction)cameraOpenOption:(id)sender
 {
     MyCaptureSessionManager *sharedManager = [MyCaptureSessionManager sharedMyCaptureSessionManager];
-    if (sharedManager.session.isRunning) {
+    if (sharedManager.session.isRunning)
+    {
         [(UIButton *)sender setTitle:@"开始" forState:UIControlStateNormal];
         [[MyCaptureSessionManager sharedMyCaptureSessionManager] stopRuning];
-    }else{ 
+    }
+    else
+    {
         [(UIButton *)sender setTitle:@"停止" forState:UIControlStateNormal];
         [[MyCaptureSessionManager sharedMyCaptureSessionManager] startRuning];
     }
@@ -200,7 +209,8 @@
     if ([sender isKindOfClass:[UIButton class]])
     {
         UIButton *aButton = (UIButton *)sender;
-        switch (aButton.tag) {
+        switch (aButton.tag)
+        {
             case 99:
             {
                 [self savePictureOrNot:YES];
@@ -221,23 +231,41 @@
 }
 
 //切换帧率
-- (IBAction)changFrameDuration:(id)sender
+- (IBAction)changCameraPresetMode:(UIButton *)sender
 {
-    MyCaptureSessionManager *sharedManager = [MyCaptureSessionManager sharedMyCaptureSessionManager];
-    CMTime currentMinFrameDuration = sharedManager.minFrameDuration;
+    MyCaptureSessionManager *sessionManager = [MyCaptureSessionManager sharedMyCaptureSessionManager];
     
-    NSInteger timeScale = currentMinFrameDuration.timescale;
-    if (timeScale < 4) {
-        timeScale = 30;
-    }else{
-        timeScale -= 10;
+    switch (sessionManager.persetMode)
+    {
+        case WillCameraPresetModeHeigh:
+        {
+            [sessionManager setCameraPresetMode:WillCameraPresetModeMiddel];
+            [sender setTitle:@"分辨率:中" forState:UIControlStateNormal];
+            break;
+        }
+            
+        case WillCameraPresetModeMiddel:
+        {
+            [sessionManager setCameraPresetMode:WillCameraPresetModeLow];
+            [sender setTitle:@"分辨率:低" forState:UIControlStateNormal];
+            break;
+        }
+            
+        case WillCameraPresetModeLow:
+        {
+            [sessionManager setCameraPresetMode:WillCameraPresetModeHeigh];
+            [sender setTitle:@"分辨率:高" forState:UIControlStateNormal];
+            break;
+        }
+            
+        default:
+        {
+            [sessionManager setCameraPresetMode:WillCameraPresetModeHeigh];
+            [sender setTitle:@"分辨率:高" forState:UIControlStateNormal];
+            break;
+        }
     }
     
-    [sharedManager configureCameraWithMinFrameDuration:CMTimeMake(1, timeScale)];
-    
-    currentMinFrameDuration = sharedManager.minFrameDuration;
-    CGFloat nowFrame = currentMinFrameDuration.timescale / currentMinFrameDuration.value;
-    [self.minFrameDurationButton setTitle:[NSString stringWithFormat:@"帧率:%f", nowFrame] forState:UIControlStateNormal];
     
 }
 
@@ -262,12 +290,16 @@
             }];
             CGImageRelease(cgImage);
 
-        }else{
+        }
+        else
+        {
             [self showTip:@"未保存成功"];
             self.picturePreiewImageView.image = nil;
             self.picturePreiewView.hidden = YES;
         }
-    }else{
+    }
+    else
+    {
         [self showTip:@"放弃保存"];
         self.picturePreiewImageView.image = nil;
         self.picturePreiewView.hidden = YES;
@@ -282,7 +314,7 @@
     if (index < _customFiltersDic.allKeys.count) {
         NSString *filterNameKey = _customFiltersDic.allKeys[index];
         self.filterNameLabel.text = filterNameKey;
-        WillCameraFilterType selectedType = [_customFiltersDic[filterNameKey] integerValue];
+        WillCameraFilterType selectedType = (WillCameraFilterType)[_customFiltersDic[filterNameKey] integerValue];
         [[MyCaptureSessionManager sharedMyCaptureSessionManager] setCameraFilterType:selectedType];
     }
 }
@@ -308,7 +340,8 @@
 
 - (UIView *)focusView
 {
-    if (!_focusView) {
+    if (!_focusView)
+    {
         _focusView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
         _focusView.backgroundColor = [UIColor clearColor];
         _focusView.layer.cornerRadius = _focusView.frame.size.height/2;

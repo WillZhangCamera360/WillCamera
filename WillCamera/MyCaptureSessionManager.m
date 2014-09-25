@@ -22,8 +22,7 @@
 ///设备是否可用
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
 
-
-
+///拍照之后的回调
 @property (nonatomic, copy) void (^takePictureCompletionBlock)(UIImage *image, NSError *error);
 
 
@@ -39,7 +38,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         
         _flashMode = AVCaptureFlashModeAuto;
         // 创建 AVCaptureSession
@@ -59,9 +59,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
             
             AVCaptureDevice *videoDevice = [self deviceWithMediaType:AVMediaTypeVideo
                                                   preferringPosition:AVCaptureDevicePositionBack];
-            //设置为最佳分辨率
+            //设置为最佳帧率
             [self configureCameraForHighestFrameRate:videoDevice];
-            _minFrameDuration = videoDevice.activeVideoMinFrameDuration;
+            
+            
             AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
                                                                                            error:&error];
             
@@ -75,6 +76,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
                 [session addInput:videoDeviceInput];
                 [self setVideoDeviceInput:videoDeviceInput];
             }
+            
+    
+            [self setCameraPresetMode:WillCameraPresetModeHeigh];
+            [session setSessionPreset:AVCaptureSessionPresetHigh];
             
             
             AVCaptureStillImageOutput *stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
@@ -120,12 +125,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CIImage *outputImage = nil;
     if (tempImage) {
         outputImage = tempImage;
-    }else{
+    }
+    else
+    {
         outputImage = sourceImage;
     }
     
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(sessionManager:didOutputSourceImage:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sessionManager:didOutputSourceImage:)])
+    {
         [self.delegate sessionManager:self didOutputSourceImage:outputImage];
     }
     
@@ -135,6 +143,46 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 
 #pragma mark - Public Method
+///设置分辨率
+- (void)setCameraPresetMode:(WillCameraPresetMode)persetMode
+{
+    dispatch_async([self sessionQueue], ^{
+      
+        NSString *sessionPreset = nil;
+        switch (persetMode)
+        {
+            case WillCameraPresetModeHeigh:
+            {
+                sessionPreset = AVCaptureSessionPresetHigh;
+                break;
+            }
+            case WillCameraPresetModeMiddel:
+            {
+                sessionPreset = AVCaptureSessionPresetMedium;
+                break;
+            }
+            case WillCameraPresetModeLow:
+            {
+                sessionPreset = AVCaptureSessionPresetLow;
+                break;
+            }
+                
+            default:
+                sessionPreset = nil;
+                break;
+        }
+        
+        if (sessionPreset && [[[self videoDeviceInput] device] supportsAVCaptureSessionPreset:sessionPreset])
+        {
+            [self.session setSessionPreset:sessionPreset];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _persetMode = persetMode;
+            });
+        }
+        
+    });
+}
 
 - (void)startRuning
 {
@@ -243,9 +291,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 [FilterManager sharedFilterManager].colorDodgeBlendModeBackgroundImage = nil;
                 
                 __weak UIImage *completionImage = nil;
-                if (outoutImage) {
+                if (outoutImage)
+                {
                     completionImage = [UIImage imageWithCIImage:outoutImage scale:1.f orientation:UIImageOrientationRight];
-                }else{
+                }
+                else
+                {
                     completionImage = [UIImage imageWithCIImage:sourceImage scale:1.f orientation:UIImageOrientationRight];
                 }
                 
@@ -275,10 +326,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         NSError *error = nil;
         if ([device lockForConfiguration:&error])
         {
-            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus])
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus] && [device isExposurePointOfInterestSupported] && [device isExposureModeSupported:AVCaptureExposureModeAutoExpose])
             {
+                [device setExposureMode:AVCaptureExposureModeAutoExpose];
+                [device setExposurePointOfInterest:interestPoint];
+                
+                [device setFocusMode:AVCaptureFocusModeAutoFocus];
                 [device setFocusPointOfInterest:interestPoint];
-                [device setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+                
             }
             [device unlockForConfiguration];
         }
@@ -289,15 +344,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     });
 }
 
-///设置帧率
-- (void)configureCameraWithMinFrameDuration:(CMTime)timeDuration
-{
-    _minFrameDuration = timeDuration;
-    dispatch_async([self sessionQueue], ^{
-        AVCaptureDevice *currentVideoDevice = [[self videoDeviceInput] device];
-        [self configureCameraWithMinFrameDuration:timeDuration device:currentVideoDevice];
-    });
-}
+
 
 
 //设置闪光灯类型
@@ -451,33 +498,6 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
     
 }
 
-
-//配置成指定帧率
-- (void)configureCameraWithMinFrameDuration:(CMTime)timeDuration device:(AVCaptureDevice *)device
-{
-    CMTime currentMinFrameDuration = device.activeVideoMinFrameDuration;
-    
-    NSMutableArray *tempLitterArr = [NSMutableArray array];
-    for ( AVCaptureDeviceFormat *format in [device formats] ) {
-        for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges ) {
-            NSInteger result = CMTimeCompare(currentMinFrameDuration, range.minFrameDuration);
-            if (result <0 ) {
-                [tempLitterArr addObject:range];
-            }
-        }
-    }
-    
-    
-    
-    if ( [device lockForConfiguration:NULL] == YES )
-    {
-        CMTime maxDuration = CMTimeMake(1, 2);//一秒两帧
-        device.activeVideoMinFrameDuration = timeDuration;
-        device.activeVideoMaxFrameDuration = maxDuration;
-        [device unlockForConfiguration];
-    }
-
-}
 
 
 @end
