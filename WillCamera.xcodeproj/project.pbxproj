@@ -186,8 +186,6 @@
 			isa = PBXGroup;
 			children = (
 				A4CF123B19CAC56900351CA9 /* Classes */,
-				A4CF123D19CAC5B300351CA9 /* Vendors */,
-				A4CF123E19CAC61400351CA9 /* Common */,
 				A4CF123C19CAC59700351CA9 /* Resources */,
 				A4CF121519CAB78C00351CA9 /* Supporting Files */,
 			);
@@ -231,6 +229,8 @@
 				A41CEE6119D256AD005F561B /* Views */,
 				A400E52819D02E4C00A07914 /* Custom Filter */,
 				A400E52419D026A200A07914 /* Manager */,
+				A4CF123D19CAC5B300351CA9 /* Vendors */,
+				A4CF123E19CAC61400351CA9 /* Common */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

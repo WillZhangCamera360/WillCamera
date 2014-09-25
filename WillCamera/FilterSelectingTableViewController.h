@@ -13,8 +13,9 @@
 
 ///选择滤镜种类
 @interface FilterSelectingTableViewController : UITableViewController
-
+///显示可选择的滤镜
 @property (nonatomic, strong)NSDictionary *dataSourceDic;
+///选择滤镜之后的回调
 @property (nonatomic, weak)id <FilterSelectingTableViewControllerDelegate>delegate;
 
 @end
@@ -23,7 +24,7 @@
 
 
 @protocol FilterSelectingTableViewControllerDelegate <NSObject>
-
+///选择滤镜之后的回调
 - (void)filterSelectingTableViewController:(FilterSelectingTableViewController *)filterVC didSelectIndex:(NSInteger)index;
 
 @end

@@ -16,10 +16,20 @@
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
 
+- (instancetype) init
+{
+    self = [super init];
+    
+    if (self)
+    {
+        _filterType = WillCameraFilterTypeNone;
+    }
+    return self;
+}
 
 #pragma mark - Public Method
 
-- (void)setCameraFilterType:(WillCameraFilterType)aType
+- (void)setupCameraFilterType:(WillCameraFilterType)aType
 {
     _filterType = aType;
     //如果是刚调整滤镜模式 就把第一张双重曝光的Image清空
@@ -43,9 +53,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
     CIFilter *currentFilter = nil;
     switch (self.filterType)
     {
+        case WillCameraFilterTypeNone:
+        {
+            currentFilter = nil;
+            break;
+        }
         case WillCameraFilterTypeColorDodgeBlendModeBackgroundImage://双重曝光相机
         {
-            currentFilter = [self colorDodgeBlendModeFilterWithInputImage:inputImage backgroundImage:self.colorDodgeBlendModeBackgroundImage];
+            currentFilter = [self colorDodgeBlendModeFilterWithInputImage:inputImage
+                                                          backgroundImage:self.colorDodgeBlendModeBackgroundImage];
             break;
         }
         case WillCameraFilterTypeOldFilm://老电影
@@ -66,8 +82,10 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(FilterManager)
             
             
         default:
+        {
             currentFilter = nil;
             break;
+        }
     }
     return currentFilter;
 }

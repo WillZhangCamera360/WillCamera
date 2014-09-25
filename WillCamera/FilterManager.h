@@ -10,6 +10,7 @@
 
 
 typedef enum {
+    WillCameraFilterTypeNone = 0,                               //无效果
     WillCameraFilterTypeColorDodgeBlendModeBackgroundImage,     //双重曝光相机
     WillCameraFilterTypeOldFilm,                                //老电影
     WillCameraFilterTypeHueAdjust,                              //饱和度调节
@@ -24,7 +25,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(FilterManager)
 ///当前滤镜
 @property (assign, readonly)WillCameraFilterType filterType;
 ///设置滤镜种类
-- (void)setCameraFilterType:(WillCameraFilterType)aType;
+- (void)setupCameraFilterType:(WillCameraFilterType)aType;
 
 ///获取当前filter输出的滤镜之后的照片
 - (CIImage *)outputImageWithCurrentFliterAndInputImage:(CIImage *)inputImage;

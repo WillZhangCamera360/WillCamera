@@ -43,14 +43,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 - (void)focusOnPoint:(CGPoint)interestPoint;
 
 ///设置相机滤镜效果
-- (void)setCameraFilterType:(WillCameraFilterType)filterType;
+- (void)setupCameraFilterType:(WillCameraFilterType)filterType;
 
 ///设置闪光灯类型
-- (void)setCameraFlashMode:(AVCaptureFlashMode)flashMode;
+- (void)setupCameraFlashMode:(AVCaptureFlashMode)flashMode;
 @property (readonly, assign)AVCaptureFlashMode flashMode;
 
 ///设置预览分辨率
-- (void)setCameraPresetMode:(WillCameraPresetMode)persetMode;
+- (void)setupCameraPresetMode:(WillCameraPresetMode)persetMode;
 @property (readonly, assign)WillCameraPresetMode persetMode;
 
 
@@ -60,7 +60,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(MyCaptureSessionManager)
 
 
 @protocol MyCaptureSessionManagerDelegate <NSObject>
-
+///MyCaptureSessionManager处理完滤镜之后 回调这个方法 aSourceImage是处理完的图片
 - (void)sessionManager:(MyCaptureSessionManager *)aManager didOutputSourceImage:(CIImage *)aSourceImage;
 
 @end

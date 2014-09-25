@@ -16,7 +16,7 @@
 @interface ViewController ()
         <MyCaptureSessionManagerDelegate, UINavigationControllerDelegate, FilterSelectingTableViewControllerDelegate>
 {
-    NSDictionary *_customFiltersDic;
+    NSDictionary *mCustomFiltersDic;
 }
 ///动态预览view
 @property (nonatomic, weak)IBOutlet AVCamPreviewGLView *previewView;
@@ -42,15 +42,19 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationController.navigationBarHidden = YES;
     self.navigationController.delegate = self;
+ 
     [[MyCaptureSessionManager sharedMyCaptureSessionManager] setDelegate:self];
-    
-    
 
-    NSDictionary *filtersDic = @{@"双重曝光":@(WillCameraFilterTypeColorDodgeBlendModeBackgroundImage),
+    NSDictionary *filtersDic = @{
+                                 @"无滤镜":@(WillCameraFilterTypeNone),
+                                 @"双重曝光":@(WillCameraFilterTypeColorDodgeBlendModeBackgroundImage),
                                  @"老电影":@(WillCameraFilterTypeOldFilm),
                                  @"饱和度调节":@(WillCameraFilterTypeHueAdjust),
                                  @"乌色":@(WillCameraFilterTypeCISepiaTone)};
-    _customFiltersDic = filtersDic;
+    
+    mCustomFiltersDic = filtersDic;
+    
+    [[MyCaptureSessionManager sharedMyCaptureSessionManager] setupCameraFilterType:WillCameraFilterTypeNone];
     [self.view addSubview:self.focusView];
     
 }
@@ -162,21 +166,21 @@
     {
         case AVCaptureFlashModeAuto:
         {
-            [sharedManager setCameraFlashMode:AVCaptureFlashModeOn];
+            [sharedManager setupCameraFlashMode:AVCaptureFlashModeOn];
             [focusButton setTitle:@"开启闪光" forState:UIControlStateNormal];
             break;
         }
             
         case AVCaptureFlashModeOn:
         {
-            [sharedManager setCameraFlashMode:AVCaptureFlashModeOff];
+            [sharedManager setupCameraFlashMode:AVCaptureFlashModeOff];
             [focusButton setTitle:@"关闭闪光" forState:UIControlStateNormal];
             break;
         }
             
         case AVCaptureFlashModeOff:
         {
-            [sharedManager setCameraFlashMode:AVCaptureFlashModeAuto];
+            [sharedManager setupCameraFlashMode:AVCaptureFlashModeAuto];
             [focusButton setTitle:@"自动闪光" forState:UIControlStateNormal];
             break;
         }
@@ -239,28 +243,28 @@
     {
         case WillCameraPresetModeHeigh:
         {
-            [sessionManager setCameraPresetMode:WillCameraPresetModeMiddel];
+            [sessionManager setupCameraPresetMode:WillCameraPresetModeMiddel];
             [sender setTitle:@"分辨率:中" forState:UIControlStateNormal];
             break;
         }
             
         case WillCameraPresetModeMiddel:
         {
-            [sessionManager setCameraPresetMode:WillCameraPresetModeLow];
+            [sessionManager setupCameraPresetMode:WillCameraPresetModeLow];
             [sender setTitle:@"分辨率:低" forState:UIControlStateNormal];
             break;
         }
             
         case WillCameraPresetModeLow:
         {
-            [sessionManager setCameraPresetMode:WillCameraPresetModeHeigh];
+            [sessionManager setupCameraPresetMode:WillCameraPresetModeHeigh];
             [sender setTitle:@"分辨率:高" forState:UIControlStateNormal];
             break;
         }
             
         default:
         {
-            [sessionManager setCameraPresetMode:WillCameraPresetModeHeigh];
+            [sessionManager setupCameraPresetMode:WillCameraPresetModeHeigh];
             [sender setTitle:@"分辨率:高" forState:UIControlStateNormal];
             break;
         }
@@ -309,13 +313,14 @@
 
 #pragma mark - FilterSelectingTableViewControllerDelegate
 
-- (void)filterSelectingTableViewController:(FilterSelectingTableViewController *)filterVC didSelectIndex:(NSInteger)index
+- (void)filterSelectingTableViewController:(FilterSelectingTableViewController *)filterVC
+                 didSelectCameraFilterType:(NSInteger)index
 {
-    if (index < _customFiltersDic.allKeys.count) {
-        NSString *filterNameKey = _customFiltersDic.allKeys[index];
+    if (index < mCustomFiltersDic.allKeys.count) {
+        NSString *filterNameKey = mCustomFiltersDic.allKeys[index];
         self.filterNameLabel.text = filterNameKey;
-        WillCameraFilterType selectedType = (WillCameraFilterType)[_customFiltersDic[filterNameKey] integerValue];
-        [[MyCaptureSessionManager sharedMyCaptureSessionManager] setCameraFilterType:selectedType];
+        WillCameraFilterType selectedType = (WillCameraFilterType)[mCustomFiltersDic[filterNameKey] integerValue];
+        [[MyCaptureSessionManager sharedMyCaptureSessionManager] setupCameraFilterType:selectedType];
     }
 }
 
@@ -328,7 +333,7 @@
         FilterSelectingTableViewController *destination = segue.destinationViewController;
         if ([destination isKindOfClass:[FilterSelectingTableViewController class]])
         {
-            destination.dataSourceDic = _customFiltersDic;
+            destination.dataSourceDic = mCustomFiltersDic;
             destination.delegate = self;
         }
     }

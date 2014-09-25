@@ -36,6 +36,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     if (indexPath.row < self.dataSourceDic.allKeys.count)
     {
         if (self.delegate && [self.delegate respondsToSelector:@selector(filterSelectingTableViewController:didSelectIndex:)])

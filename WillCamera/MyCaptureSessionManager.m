@@ -44,14 +44,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
         _flashMode = AVCaptureFlashModeAuto;
         // 创建 AVCaptureSession
         AVCaptureSession *session = [[AVCaptureSession alloc] init];
-        [self setSession:session];
+        self.session = session;
         
         // 检查设备video是否可用
         [self checkDeviceAuthorizationStatus];
         
         ///创建线程队列
         dispatch_queue_t sessionQueue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL);
-        [self setSessionQueue:sessionQueue];
+        self.sessionQueue = sessionQueue;
         
         dispatch_async(sessionQueue, ^{
             
@@ -74,11 +74,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MyCaptureSessionManager)
             if ([session canAddInput:videoDeviceInput])
             {
                 [session addInput:videoDeviceInput];
-                [self setVideoDeviceInput:videoDeviceInput];
+                self.videoDeviceInput = videoDeviceInput;
             }
             
     
-            [self setCameraPresetMode:WillCameraPresetModeHeigh];
+            [self setupCameraPresetMode:WillCameraPresetModeHeigh];
             [session setSessionPreset:AVCaptureSessionPresetHigh];
             
             
@@ -144,7 +144,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 #pragma mark - Public Method
 ///设置分辨率
-- (void)setCameraPresetMode:(WillCameraPresetMode)persetMode
+- (void)setupCameraPresetMode:(WillCameraPresetMode)persetMode
 {
     dispatch_async([self sessionQueue], ^{
       
@@ -201,9 +201,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 
-- (void)setCameraFilterType:(WillCameraFilterType)filterType
+- (void)setupCameraFilterType:(WillCameraFilterType)filterType
 {
-    [[FilterManager sharedFilterManager] setCameraFilterType:filterType];
+    [[FilterManager sharedFilterManager] setupCameraFilterType:filterType];
 }
 
 
@@ -274,7 +274,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                
                 //双重曝光第一张照片
-                if ([FilterManager sharedFilterManager].filterType == WillCameraFilterTypeColorDodgeBlendModeBackgroundImage)
+                if ([FilterManager sharedFilterManager].filterType ==
+                    WillCameraFilterTypeColorDodgeBlendModeBackgroundImage)
                 {
 
                     if (![FilterManager sharedFilterManager].colorDodgeBlendModeBackgroundImage) {
@@ -348,7 +349,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 
 //设置闪光灯类型
-- (void)setCameraFlashMode:(AVCaptureFlashMode)flashMode
+- (void)setupCameraFlashMode:(AVCaptureFlashMode)flashMode
 {
     _flashMode = flashMode;
     

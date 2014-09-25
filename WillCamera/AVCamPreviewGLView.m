@@ -10,7 +10,7 @@
 
 @interface AVCamPreviewGLView ()
 {
-    BOOL alreadyAwake;
+    BOOL mAlreadyAwake;
 }
 
 @property (readonly) GLKView *previewGLView;
@@ -24,9 +24,10 @@
 
 - (void)awakeFromNib
 {
-    alreadyAwake = YES;
+    mAlreadyAwake = YES;
     
-    if (!_previewGLView) {
+    if (!_previewGLView)
+    {
         CGRect screenBounds = [UIScreen mainScreen].bounds;
         _previewGLView = [[GLKView alloc] initWithFrame:
                                         CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width)];
@@ -41,7 +42,8 @@
         [self insertSubview:self.previewGLView atIndex:0];
 
     
-    if (!_ciContext) {
+    if (!_ciContext)
+    {
         _ciContext = [CIContext contextWithEAGLContext:self.previewGLView.context options:@{kCIContextWorkingColorSpace : [NSNull null]} ];
     }
 }
@@ -61,7 +63,7 @@
 
 - (void)drawImage:(CIImage *)im
 {
-    if (!alreadyAwake)
+    if (!mAlreadyAwake)
     {
         return;
     }
