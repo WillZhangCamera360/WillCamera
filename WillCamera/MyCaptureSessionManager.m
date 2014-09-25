@@ -134,7 +134,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(sessionManager:didOutputSourceImage:)])
     {
-        [self.delegate sessionManager:self didOutputSourceImage:outputImage];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate sessionManager:self didOutputSourceImage:outputImage];
+        });
     }
     
 

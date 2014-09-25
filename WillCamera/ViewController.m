@@ -314,7 +314,7 @@
 #pragma mark - FilterSelectingTableViewControllerDelegate
 
 - (void)filterSelectingTableViewController:(FilterSelectingTableViewController *)filterVC
-                 didSelectCameraFilterType:(NSInteger)index
+                            didSelectIndex:(NSInteger)index
 {
     if (index < mCustomFiltersDic.allKeys.count) {
         NSString *filterNameKey = mCustomFiltersDic.allKeys[index];
